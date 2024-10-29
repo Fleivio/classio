@@ -7,7 +7,7 @@ def index_screen():
     return """
     <h1>Classio</h1>
     <p>Bem-vindo à página inicial.</p>
-    <p>Go to the <a href="/login">Login</a> page.</p>
+    <p>Acesse a página de <a href="/login">Login</a>.</p>
     """
 
 @app.route("/login")
