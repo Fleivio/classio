@@ -16,7 +16,16 @@ def is_logged():
 @app.route("/")
 def index_screen():
     if is_logged():
-        return render_template("index_logged.jinja")
+        user_data = {
+            'name': 'PIMTO',
+            'classes': [
+                { 'name': 'Turma de Teste 1', 'class_id' : 'CLASS_TEST_ID'},
+                { 'name': 'Turma de Teste 2', 'class_id' : 'CLASS_TEST_ID'}
+                ]
+            
+        }
+
+        return render_template("index_logged.jinja",user_data=user_data)
     else:
         return render_template("index.jinja")
     
@@ -52,7 +61,7 @@ def class_screen():
         # adicionar verificação da validade do acesso à turma
 
         class_data = {
-            'class_id': '1',
+            'class_id': 'CLASS_TEST_ID',
             'name': 'Turma de Teste',
             'description': 'Turma de Teste',
             'professor': ['Marsio', 'Pedro'],
@@ -89,3 +98,20 @@ def class_stats():
     else:
         return redirect("/")
 
+@app.route('/lesson')
+def lesson_screen():
+    if is_logged():
+        lesson_id = request.args.get('lesson_id')
+        # adicionar verificação da validade do acesso à aula
+
+        lesson_data = {
+            'lesson_id': '1',
+            'name': 'Aula 1',
+            'description': 'Aula de Teste',
+            'content': 'Conteúdo da Aula',
+            'class_id': 'CLASS_TEST_ID'
+            }
+        
+        return render_template("lesson.jinja", lesson_data=lesson_data)
+    else:
+        return redirect("/")

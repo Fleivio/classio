@@ -5,7 +5,12 @@
 </head>
 <body>
     <h2>Classio</h2>
-    <p>Você está logado.</p>
+    <p>Você está logado, {{user_data.name}}</p>
+    <ul>
+        {%for class in user_data.classes%}
+            <li><a href={{"/class?class_id=" + class.class_id}}>{{class.name}}</a></li>
+        {%endfor%}
+    </ul>
     <a href="/logout">Logout</a>
 </body>
 </html>
