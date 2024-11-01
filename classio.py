@@ -4,17 +4,26 @@ import os
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
-@app.route("/")
-def index_screen():
-    token = request.cookies.get('auth_token')
+tk_name = 'classio_token'
+
+def is_logged():
+    token = request.cookies.get(tk_name)
     if token:
         # adicionar verificação da validade do token
+        return True
+    return False
+
+@app.route("/")
+def index_screen():
+    if is_logged():
         return render_template("index_logged.jinja")
     else:
         return render_template("index.jinja")
     
 @app.get("/login")
 def login_get():
+    if is_logged():
+        return redirect("/")
     return render_template("login.jinja")
 
 @app.post("/login")
@@ -23,8 +32,8 @@ def login_post():
     password = request.form["password"]
     if (username == "eduardo"):
         # adicionar verificação de senha e email
-        response = make_response(redirect(url_for('index_screen')))
-        response.set_cookie('auth_token', 'default_token')
+        response = make_response(redirect("/"))
+        response.set_cookie(tk_name, 'default_token')
         return response
     else:
         flash('Email inválido. Tente novamente.')
@@ -32,7 +41,51 @@ def login_post():
 
 @app.route('/logout')
 def logout():
-    # Remove o cookie de autenticação
-    response = make_response(redirect(url_for('index_screen')))
-    response.set_cookie('auth_token', '', expires=0)
+    response = make_response(redirect("/"))
+    response.set_cookie(tk_name, '', expires=0)
     return response
+
+@app.route('/class')
+def class_screen():
+    if is_logged():
+        class_id = request.args.get('class_id')
+        # adicionar verificação da validade do acesso à turma
+
+        class_data = {
+            'class_id': '1',
+            'name': 'Turma de Teste',
+            'description': 'Turma de Teste',
+            'professor': ['Marsio', 'Pedro'],
+            'students': ['Carlos', 'Frederico'],
+            'lessons' : [
+                { 'name': 'Aula 1', 'id' : '1'},
+                { 'name': 'Aula 2', 'id' : '2'},
+                ]
+            }
+        
+        return render_template("class.jinja", class_data=class_data)
+    else:
+        return redirect("/")
+    
+@app.route('/class/stats')
+def class_stats():
+    if is_logged():
+        class_id = request.args.get('class_id')
+        # adicionar verificação da validade do acesso à turma
+
+        class_data = {
+            'class_id': '1',
+            'name': 'Turma de Teste',
+            'description': 'Turma de Teste',
+            'professor': ['Marsio', 'Pedro'],
+            'students': ['Carlos', 'Frederico'],
+            'lessons' : [
+                { 'name': 'Aula 1', 'id' : '1'},
+                { 'name': 'Aula 2', 'id' : '2'},
+                ]
+            }
+        # adicionar verificação da validade do acesso à turma
+        return render_template("class_stats.jinja", class_data=class_data)
+    else:
+        return redirect("/")
+
