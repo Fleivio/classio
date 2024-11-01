@@ -18,9 +18,13 @@ def index_screen():
     if is_logged():
         user_data = {
             'name': 'PIMTO',
-            'classes': [
+            'classes_professor': [
                 { 'name': 'Turma de Teste 1', 'class_id' : 'CLASS_TEST_ID'},
                 { 'name': 'Turma de Teste 2', 'class_id' : 'CLASS_TEST_ID'}
+                ],
+            'classes_student': [
+                { 'name': 'Turma de Teste 3', 'class_id' : 'CLASS_TEST_ID'},
+                { 'name': 'Turma de Teste 4', 'class_id' : 'CLASS_TEST_ID'}
                 ]
             
         }
@@ -59,6 +63,7 @@ def class_screen():
     if is_logged():
         class_id = request.args.get('class_id')
         # adicionar verificação da validade do acesso à turma
+        # separar as rotas do aluno e do professor
 
         class_data = {
             'class_id': 'CLASS_TEST_ID',
@@ -72,7 +77,7 @@ def class_screen():
                 ]
             }
         
-        return render_template("class.jinja", class_data=class_data)
+        return render_template("class_professor.jinja", class_data=class_data)
     else:
         return redirect("/")
     
@@ -80,7 +85,7 @@ def class_screen():
 def class_stats():
     if is_logged():
         class_id = request.args.get('class_id')
-        # adicionar verificação da validade do acesso à turma
+        # adicionar verificação da validade do acesso à turma como professor
 
         class_data = {
             'class_id': '1',
