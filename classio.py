@@ -51,6 +51,19 @@ def login_post():
     else:
         flash('Email inválido. Tente novamente.')
         return redirect('/login')
+    
+@app.get("/signup")
+def signup_get():
+    if is_logged():
+        return redirect("/")
+    return render_template("sign_up.jinja")
+
+@app.post("/signup")
+def signup_post():
+    #cria a conta
+    response = make_response(redirect("/"))
+    response.set_cookie(tk_name, 'default_token')
+    return response
 
 @app.route('/logout')
 def logout():
@@ -58,7 +71,7 @@ def logout():
     response.set_cookie(tk_name, '', expires=0)
     return response
 
-@app.route('/class')
+@app.get('/class')
 def class_screen():
     if is_logged():
         class_id = request.args.get('class_id')
@@ -81,7 +94,7 @@ def class_screen():
     else:
         return redirect("/")
     
-@app.route('/class/stats')
+@app.get('/class/stats')
 def class_stats():
     if is_logged():
         class_id = request.args.get('class_id')
@@ -103,7 +116,7 @@ def class_stats():
     else:
         return redirect("/")
 
-@app.route('/lesson')
+@app.get('/lesson')
 def lesson_screen():
     if is_logged():
         lesson_id = request.args.get('lesson_id')
