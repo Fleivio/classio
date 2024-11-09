@@ -1,9 +1,9 @@
 from flask import *
 from .user import is_logged
 
-main = Blueprint('main', __name__)
+lesson = Blueprint('lesson', __name__)
 
-@main.get('/class')
+@lesson.get('/class')
 def class_screen():
     if is_logged():
         class_id = request.args.get('class_id')
@@ -26,7 +26,7 @@ def class_screen():
     else:
         return redirect("/")
     
-@main.get('/class/stats')
+@lesson.get('/class/stats')
 def class_stats():
     if is_logged():
         class_id = request.args.get('class_id')
@@ -48,7 +48,7 @@ def class_stats():
     else:
         return redirect("/")
 
-@main.get('/lesson')
+@lesson.get('/lesson')
 def lesson_screen():
     if is_logged():
         lesson_id = request.args.get('lesson_id')
