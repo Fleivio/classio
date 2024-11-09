@@ -8,7 +8,7 @@ from app.routes.lesson import lesson
 from app.routes.user import user
 from app.routes.debug import debug
 
-from app.models.models import db
+from app.models import db
 
 migrate = Migrate()
 
@@ -23,5 +23,7 @@ def create_app():
     app.register_blueprint(lesson)
     app.register_blueprint(user)
     app.register_blueprint(debug)
+
+    from .models import User
 
     return app
