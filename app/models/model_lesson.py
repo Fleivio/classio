@@ -1,4 +1,4 @@
-from .db import db
+from . import db
 
 class Lesson(db.Model):
     __tablename__ = 'lesson'

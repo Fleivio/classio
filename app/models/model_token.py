@@ -1,4 +1,4 @@
-from .db import db
+from . import db
 import secrets
 from datetime import datetime, timedelta, timezone
 
@@ -21,5 +21,8 @@ class Token(db.Model):
         db.session.add(new_token)
         db.session.commit()
         return new_token
+    
+    def get_user_id(token):
+        return Token.query.filter_by(token=token).first().user_id
     
     # TODO delete expired tokens
