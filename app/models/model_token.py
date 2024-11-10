@@ -21,3 +21,5 @@ class Token(db.Model):
         db.session.add(new_token)
         db.session.commit()
         return new_token
+    
+    # TODO delete expired tokens
