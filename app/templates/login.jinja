@@ -1,28 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Login</title>
-</head>
-<body>
-    <h2>Login</h2>
-    <form action="/login" id="loginForm" method="post">
-        <label for="email">Email:</label>
-        <input type="text" id="email" name="email" required><br><br>
+{% extends "base.jinja" %}
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
+{% block title %}Entrar{% endblock %}
 
-        <button type="submit">Login</button>
-    </form>
+{% block head %}
+    {{ super() }}
+{% endblock %}
 
-    <div id="message">
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for message in messages %}
-                    <p style="color: red;">{{ message }}</p>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+{% block content %}
+    <div class="container text-center mt-5">
+        <h2 class="mb-4">Entrar</h2>
+
+        <form action="/login" id="loginForm" method="post">
+
+            <label class="form-label" for="email">Email</label>
+            <div class="col-10 offset-1 col-md-4 offset-md-4 mb-4">
+                <input class="form-control" type="text" id="email" name="email" required>
+            </div>
+
+            <label class="form-label" for="password">Senha</label>
+            <div class="col-10 offset-1 col-md-4 offset-md-4 mb-4">
+                <input class="form-control" type="password" id="password" name="password" required>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Entrar</button>
+        </form>
+
+        <div id="message">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <p style="color: red;">{{ message }}</p>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
     </div>
-</body>
-</html>
+{% endblock %}

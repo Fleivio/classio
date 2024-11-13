@@ -1,12 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Classio</title>
-</head>
-<body>
-    <h2>Classio</h2>
-    <p>Bem-vindo ao Classio.</p>
-    <p>Acesse a página de <a href="/login">Login</a>.</p>
-    <p>Acesse a página de <a href="/signup">SignUp</a>.</p>
-</body>
-</html>
+{% extends "base.jinja" %}
+
+{% block title %}Index{% endblock %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div class="container text-center mt-5">
+        <h2 class="mb-4">Classio</h2>
+        <p class="lead">Bem-vindo ao Classio!</p>
+        <div class="mt-3">
+            <a href="/login" class="btn btn-primary mx-2">Entrar</a>
+            <a href="/signup" class="btn btn-secondary mx-2">Cadastrar-se</a>
+        </div>
+    </div>
+{% endblock %}
