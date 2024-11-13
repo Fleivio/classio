@@ -6,6 +6,7 @@ from .config import Config
 
 from app.models import db
 from app.routes.debug import debug
+from app.routes.user import user
 
 def create_app():
     app = Flask(__name__)
@@ -16,5 +17,6 @@ def create_app():
     Migrate(app, db)
 
     app.register_blueprint(debug, url_prefix='/debug')
+    app.register_blueprint(user)
 
     return app
