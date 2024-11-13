@@ -3,9 +3,9 @@ from flask_migrate import Migrate
 import os
 
 from .config import Config
-from mvc_flask import FlaskMVC
 
 from app.models import db
+from app.routes.debug import debug
 
 def create_app():
     app = Flask(__name__)
@@ -14,6 +14,7 @@ def create_app():
 
     db.init_app(app)
     Migrate(app, db)
-    FlaskMVC(app)
+
+    app.register_blueprint(debug, url_prefix='/debug')
 
     return app
