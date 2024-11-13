@@ -65,7 +65,9 @@ def user_home():
 
     uid = token.user_id
 
-    user_classes_student = Enrollment.query.filter_by(student_id=uid).all().class_
+    student_enrollments = Enrollment.query.filter_by(student_id=uid).all()
+    user_classes_student = map(lambda elem: elem.class_, student_enrollments)
+
     user_classes_professor = Class.query.filter_by(professor_id=uid).all()
 
     return render_template("index_logged.jinja",user_data=[])
