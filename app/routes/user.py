@@ -1,41 +1,9 @@
+from datetime import datetime, timezone
 from flask import * 
 from app.config import Config
-from app.models import User, Token, db
+from app.models import User, Token, Class, Enrollment, db
 
 user = Blueprint('user', __name__)
-
-def is_logged():
-    token = request.cookies.get(Config.TOKEN_NAME)
-    if token:
-        # adicionar verificação da validade do token
-        return True
-    return False
-
-@user.route("/")
-def index_screen():
-    if is_logged():
-        user_data = {
-            'name': 'PIMTO',
-            'classes_professor': [
-                { 'name': 'Turma de Teste 1', 'class_id' : 'CLASS_TEST_ID'},
-                { 'name': 'Turma de Teste 2', 'class_id' : 'CLASS_TEST_ID'}
-                ],
-            'classes_student': [
-                { 'name': 'Turma de Teste 3', 'class_id' : 'CLASS_TEST_ID'},
-                { 'name': 'Turma de Teste 4', 'class_id' : 'CLASS_TEST_ID'}
-                ]
-            
-        }
-
-        return render_template("index_logged.jinja",user_data=user_data)
-    else:
-        return render_template("index.jinja")
-    
-@user.get("/login")
-def login_get():
-    if is_logged():
-        return redirect("/")
-    return render_template("login.jinja")
 
 @user.post("/login")
 def login_post():
@@ -58,12 +26,6 @@ def login_post():
     response.set_cookie(Config.TOKEN_NAME, token.token)
     return response
 
-@user.get("/signup")
-def signup_get():
-    if is_logged():
-        return redirect("/")
-    return render_template("sign_up.jinja")
-
 @user.post("/signup")
 def signup_post():
     username = request.form.get("username")
@@ -82,6 +44,28 @@ def signup_post():
 
 @user.route('/logout')
 def logout():
+    cookie_token = request.cookies.get(Config.TOKEN_NAME)
+
+    token = Token.query.filter_by(token=cookie_token).first()
+    if token:
+        db.session.delete(token)
+        db.session.commit()
+
     response = make_response(redirect("/"))
     response.set_cookie(Config.TOKEN_NAME, '', expires=0)
     return response
+
+@user.get("/home")
+def user_home():
+    tk = request.cookies.get(Config.TOKEN_NAME)
+    token = Token.query.filter_by(token=tk).first()
+    
+    if not token or token.expires_at < datetime.now(timezone.utc):
+        return redirect("/")
+
+    uid = token.user_id
+
+    user_classes_student = Enrollment.query.filter_by(student_id=uid).all().class_
+    user_classes_professor = Class.query.filter_by(professor_id=uid).all()
+
+    return render_template("index_logged.jinja",user_data=[])

@@ -1,5 +1,4 @@
 from flask import *
-from .user import is_logged
 from app.models import User, Token
 from app.models import db
 

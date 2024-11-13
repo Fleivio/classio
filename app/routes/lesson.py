@@ -1,5 +1,5 @@
 from flask import *
-from .user import is_logged
+from .index import is_logged
 
 lesson = Blueprint('lesson', __name__)
 
