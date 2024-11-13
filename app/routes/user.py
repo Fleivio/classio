@@ -59,10 +59,11 @@ def logout():
 def user_home():
     tk = request.cookies.get(Config.TOKEN_NAME)
     token = Token.query.filter_by(token=tk).first()
-    
-    if not token or token.expires_at < datetime.now(timezone.utc):
-        return redirect("/")
 
+
+    if not token or token.expired():
+        return redirect("/")
+    
     uid = token.user_id
 
     student_enrollments = Enrollment.query.filter_by(student_id=uid).all()

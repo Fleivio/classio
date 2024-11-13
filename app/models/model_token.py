@@ -21,8 +21,10 @@ class Token(db.Model):
         db.session.add(new_token)
         db.session.commit()
         return new_token
-    
+
+    def expired(self):
+        now = datetime.now(timezone.utc)
+        return self.expires_at.replace(tzinfo=timezone.utc) < now
+
     def get_user_id(token):
         return Token.query.filter_by(token=token).first().user_id
-    
-    # TODO delete expired tokens
