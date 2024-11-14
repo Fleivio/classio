@@ -5,6 +5,12 @@ from .index import get_active_token
 
 class_ = Blueprint('class_', __name__)
 
+@class_.get('')
+def class_get_class():
+    id = request.args.get('class_id')
+    class_ = Class.query.filter_by(class_id=id).first()
+    return render_template("class_professor.jinja", class_data=class_)
+
 @class_.post('/create')
 def create():
     token = get_active_token()

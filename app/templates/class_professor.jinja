@@ -7,10 +7,10 @@
     <h2>{{class_data.name}}</h2>
     
     <a href="/">Home</a>
-    <a href={{"/class/stats?classId=" + class_data.class_id}}>Estatísticas</a>
+    <a href={{"/class/stats?classId=" + "class_data.class_id"}}>Estatísticas</a> -->
     <ul>
       {% for lesson in class_data.lessons %}
-        <li><a href={{ "/lesson?lessonId=" + lesson.id }}>{{lesson.name}}</a></li>
+        <li><a href={{ "/lesson?lessonId=" + "lesson.id" }}>{{lesson.name}}</a></li> -->
       {% endfor %}
     </ul>
     <a href="/">Criar Aula</a>
