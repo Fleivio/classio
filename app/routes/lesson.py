@@ -1,5 +1,6 @@
 from flask import *
 from .index import is_logged
+from app.models import Lesson
 
 lesson = Blueprint('lesson', __name__)
 
@@ -65,3 +66,4 @@ def lesson_screen():
         return render_template("lesson.jinja", lesson_data=lesson_data)
     else:
         return redirect("/")
+

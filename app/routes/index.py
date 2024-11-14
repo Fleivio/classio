@@ -8,7 +8,7 @@ def has_active_token():
     cookie_token = request.cookies.get(Config.TOKEN_NAME)
     token = Token.query.filter_by(token=cookie_token).first()
 
-    if token:
+    if token and not token.expired():
         return True
     return False
 
