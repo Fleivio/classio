@@ -7,24 +7,24 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container text-center mt-5">
+    <div class="container offset-md-4 mt-5">
 
         <h2 class="mb-4">Criação de Conta</h2>
 
         <form action="/user/create" id="loginForm" method="post">
 
             <label class="form-label" for="username">Nome de Usuário</label>
-            <div class="col-10 offset-1 col-md-4 offset-md-4 mb-4">
+            <div class="col-md-4 mb-4">
                 <input class="form-control" type="text" id="username" name="username" required>
             </div>
 
             <label class="form-label" for="email">Email</label>
-            <div class="col-10 offset-1 col-md-4 offset-md-4 mb-4">
+            <div class="col-md-4 mb-4">
                 <input class="form-control" type="email" id="email" name="email" required>
             </div>
 
             <label class="form-label" for="password">Senha</label>
-            <div class="col-10 offset-1 col-md-4 offset-md-4 mb-4">
+            <div class="col-md-4 mb-4">
                 <input class="form-control" type="password" id="password" name="password" required>
             </div>
 
