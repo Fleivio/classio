@@ -19,22 +19,17 @@
             <div class="col-md-9">
                 <div class="container">
 
-                    <h2 class="mb-4">Criar Turma</h2>
+                    <h2 class="mb-4">Participar de uma Turma</h2>
 
-                    <form action="/class/create" id="classCreateForm" method="post">
+                    <form action="/class/join" id="classJoinForm" method="post">
 
                         
-                        <label class="form-label" for="class_name">Nome</label>
+                        <label class="form-label" for="class_code">Código da Turma</label>
                         <div class="col-10 col-md-6 mb-4">
-                            <input class="form-control" type="text" id="class_name" name="class_name" required>
+                            <input class="form-control" type="text" id="class_code" name="class_code" required>
                         </div>
 
-                        <label class="form-label" for="class_description">Descrição</label>
-                        <div class="col-10 col-md-6 mb-4">
-                            <textarea class="form-control" id="class_description" name="class_description" rows="6" required></textarea>
-                        </div>
-
-                        <button class="btn btn-primary" type="submit">Criar</button>
+                        <button class="btn btn-primary" type="submit">Participar</button>
                     </form>
 
                     <div id="message">

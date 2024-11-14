@@ -30,3 +30,6 @@ def create():
 def class_get_create():
     return render_template("class_create.jinja")
 
+@class_.get('/join')
+def class_get_join():
+    return render_template("class_join.jinja")

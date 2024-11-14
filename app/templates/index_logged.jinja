@@ -7,15 +7,10 @@
 {% endblock %}
 
 {% block content %}
-
     <div class="container mt-5">
         <div class="row gx-5 gy-3">
-            <div class="col-md-3">
-                <ul class="list-group">
-                    <a href="/class/create" class="list-group-item list-group-item-action">Criar Turma</a>
-                    <a href="/user/logout" class="list-group-item list-group-item-action">Logout</a>
-                </ul>
-            </div>
+
+            {% include "sidebar.jinja" %}
 
             <div class="col-md-9">
                 <h2>Classio</h2>
@@ -37,6 +32,4 @@
             </div>
         </div>
     </div>
-
-
 {% endblock %}
