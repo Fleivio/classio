@@ -8,7 +8,6 @@ class_ = Blueprint('class_', __name__)
 @class_.post('/create_class')
 def create_class():
     if has_active_token():
-        
         class_name = request.form.get('class_name')
         class_description = request.form.get('class_description')
 

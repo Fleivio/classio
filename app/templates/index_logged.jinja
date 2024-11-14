@@ -10,14 +10,14 @@
     <h3>Suas Turmas</h3>
     <ul>
         {%for class in user_data.classes_professor%}
-            <li><a href={{"/class?class_id=" + class.class_id}}>{{class.name}}</a></li>
+            <li><a href={{"/class?class_id=" + class.class_id}}>{{class.class_name}}</a></li>
         {%endfor%}
     </ul>
 
     <h3>Turmas Como Convidado</h3>
     <ul>
         {%for class in user_data.classes_student%}
-            <li><a href={{"/class?class_id=" + class.class_id}}>{{class.name}}</a></li>
+            <li><a href={{"/class?class_id=" + class.class_id}}>{{class.class_name}}</a></li>
         {%endfor%}
     </ul>
     <a href="/logout">Logout</a>

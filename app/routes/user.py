@@ -71,4 +71,22 @@ def user_home():
     user_classes_student = map(lambda elem: elem.class_, student_enrollments)
     user_classes_professor = Class.query.filter_by(professor_id=uid).all()
 
-    return render_template("index_logged.jinja",user_data=[])
+    # create a list of dictionaries with the class information
+
+    def class_to_dict(elem):
+        return {
+            'class_name': elem.class_name,
+            'class_description': elem.class_description,
+            'class_id': str(elem.class_id)
+        }
+
+    user_data = {
+        'classes_student': 
+            list(map(class_to_dict, user_classes_student)),
+        'classes_professor': 
+            list(map(class_to_dict, user_classes_professor))
+    }
+
+    print(user_data)
+
+    return render_template("index_logged.jinja",user_data=user_data)

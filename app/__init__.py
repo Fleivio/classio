@@ -5,7 +5,6 @@ import os
 from .config import Config
 
 from app.models import db
-from app.routes.debug import debug
 from app.routes.index import index
 from app.routes.class_ import class_
 from app.routes.user import user
@@ -18,7 +17,6 @@ def create_app():
     db.init_app(app)
     Migrate(app, db)
 
-    app.register_blueprint(debug, url_prefix='/debug')
     app.register_blueprint(user)
     app.register_blueprint(index)
     app.register_blueprint(class_)
