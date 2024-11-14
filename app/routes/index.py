@@ -1,5 +1,5 @@
 from app.config import Config
-from app.models import Class, Enrollment, Token
+from app.models import Class, Enrollment, Token, User
 from flask import Blueprint, redirect, render_template, request
 
 index = Blueprint('index', __name__)
@@ -52,11 +52,14 @@ def user_home():
             'class_id': str(elem.class_id)
         }
 
+    user = User.query.filter_by(user_id=uid).first()
+
     user_data = {
         'classes_student': 
             list(map(class_to_dict, user_classes_student)),
         'classes_professor': 
-            list(map(class_to_dict, user_classes_professor))
+            list(map(class_to_dict, user_classes_professor)),
+        'username': user.username
     }
 
     print(user_data)

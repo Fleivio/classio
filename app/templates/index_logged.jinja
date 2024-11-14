@@ -8,25 +8,35 @@
 
 {% block content %}
 
-    <h2>Classio</h2>
-    <p>Você está logado, {{user_data.name}}</p>
+    <div class="container mt-5">
+        <div class="row gx-5 gy-3">
+            <div class="col-md-3">
+                <ul class="list-group">
+                    <a href="/class/create" class="list-group-item list-group-item-action">Criar Turma</a>
+                    <a href="/user/logout" class="list-group-item list-group-item-action">Logout</a>
+                </ul>
+            </div>
 
-    <h3>Suas Turmas</h3>
-    <ul>
-        {%for class in user_data.classes_professor%}
-            <li><a href={{"/class?class_id=" + class.class_id}}>{{class.class_name}}</a></li>
-        {%endfor%}
-    </ul>
+            <div class="col-md-9">
+                <h2>Classio</h2>
+                <p>Bem-vindo de volta, {{user_data.username}}!</p>
 
-    <h3>Turmas Como Convidado</h3>
-    <ul>
-        {%for class in user_data.classes_student%}
-            <li><a href={{"/class?class_id=" + class.class_id}}>{{class.class_name}}</a></li>
-        {%endfor%}
-    </ul>
+                <h3 class="mt-3">Minhas Turmas</h3>
+                <ul class="list-group mt-3">
+                    {%for class in user_data.classes_professor%}
+                        <a href={{"/class?class_id=" + class.class_id}} class="list-group-item list-group-item-action">{{class.class_name}}</a>
+                    {%endfor%}
+                </ul>
 
-    <a href="/user/logout">Logout</a>
+                <h3 class="mt-3">Turmas Como Convidado</h3>
+                <ul class="list-group mt-3">
+                    {%for class in user_data.classes_student%}
+                        <a href={{"/class?class_id=" + class.class_id}} class="list-group-item list-group-item-action">{{class.class_name}}</a>
+                    {%endfor%}
+                </ul>
+            </div>
+        </div>
+    </div>
 
-    <a href="/class/create">Criar Turma</a>
 
 {% endblock %}
