@@ -1,19 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>{{class_data.name}}</title>
-</head>
-<body>
-    <h2>{{class_data.name}}</h2>
-    
-    <a href="/">Home</a>
-    <a href={{"/class/stats?classId=" + "class_data.class_id"}}>Estatísticas</a> -->
-    <ul>
-      {% for lesson in class_data.lessons %}
-        <li><a href={{ "/lesson?lessonId=" + "lesson.id" }}>{{lesson.name}}</a></li> -->
-      {% endfor %}
-    </ul>
-    <a href="/">Criar Aula</a>
+{% extends "base.jinja" %}
 
-</body>
-</html>
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="row gx-5 gy-3">
+            {% include "sidebar.jinja" %}
+            <div class="col-md-9">
+                <h2>{{ class_data.class_name }}</h2>
+                <p class="lead">{{ class_data.class_description }}</p>
+
+                <div class="container mb-3">
+                    <div class="row">
+                        <div class="col gx-0">
+                            <h3>Aulas</h3>
+                        </div>
+                        <div class="col gx-0 text-end">
+                            <button class="btn btn-primary">Adicionar</button>
+                        </div>
+                    </div>
+                </div>
+                <ul class="list-group">
+                    {% for lesson in range(0, 4) %}
+                        <a class="list-group-item list-group-item-active" href={{ "/lesson?lessonId=" + "lesson.id" }}>Aula {{lesson + 1}}</a>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
