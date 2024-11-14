@@ -1,6 +1,6 @@
-from flask import * 
 from app.config import Config
-from app.models import Token, Class, Enrollment
+from app.models import Class, Enrollment, Token
+from flask import Blueprint, redirect, render_template, request
 
 index = Blueprint('index', __name__)
 

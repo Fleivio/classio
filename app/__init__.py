@@ -1,13 +1,15 @@
+import os
+
 from flask import Flask
 from flask_migrate import Migrate
-import os
+
+from app.models import db
+from app.routes.class_api import class_
+from app.routes.index import index
+from app.routes.user_api import user
 
 from .config import Config
 
-from app.models import db
-from app.routes.index import index
-from app.routes.class_api import class_
-from app.routes.user_api import user
 
 def create_app():
     app = Flask(__name__)

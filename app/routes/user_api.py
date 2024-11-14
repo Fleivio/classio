@@ -1,7 +1,7 @@
-from flask import * 
 from app.config import Config
-from app.models import User, Token, db
+from app.models import Token, User, db
 from app.routes.index import get_active_token
+from flask import Blueprint, make_response, redirect, request
 
 user = Blueprint('user', __name__)
 

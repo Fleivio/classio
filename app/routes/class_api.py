@@ -1,7 +1,7 @@
-from flask import *
+from app.models import Class, db
+from flask import Blueprint, request
+
 from .index import get_active_token
-from app.models import Class, db, Token
-from app.config import Config
 
 class_ = Blueprint('class_', __name__)
 
