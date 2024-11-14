@@ -4,8 +4,42 @@
 
 {% block head %}
     {{ super() }}
+    <style>
+        textarea {
+            resize: none;
+        }
+    </style
 {% endblock %}
 
 {% block content %}
-    <h2>Criar Turma</h2>
+    <div class="container text-center mt-5">
+
+        <h2 class="mb-4">Criar Turma</h2>
+
+        <form action="/class/create" id="classCreateForm" method="post">
+
+            
+            <label class="form-label" for="name">Nome</label>
+            <div class="col-10 offset-1 col-md-4 offset-md-4 mb-4">
+                <input class="form-control" type="text" id="name" name="name" required>
+            </div>
+
+            <label class="form-label" for="description">Descrição</label>
+            <div class="col-10 offset-1 col-md-4 offset-md-4 mb-4">
+                <textarea class="form-control" id="description" name="description" rows="6" required></textarea>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Criar</button>
+        </form>
+
+        <div id="message">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <p style="color: red;">{{ message }}</p>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div>
 {% endblock %}
