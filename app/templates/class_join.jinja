@@ -1,6 +1,6 @@
 {% extends "base.jinja" %}
 
-{% block title %}Criar Turma{% endblock %}
+{% block title %}Classio{% endblock %}
 
 {% block head %}
     {{ super() }}
@@ -19,12 +19,14 @@
             <div class="col-md-9">
                 <div class="container">
 
-                    <h2 class="mb-4">Participar de uma Turma</h2>
+                    <h2 class="mb-2">Participar</h2>
+
+                    <p class="lead">Participe de uma disciplina como aluno.</p>
 
                     <form action="/class/join" id="classJoinForm" method="post">
 
                         
-                        <label class="form-label" for="class_code">Código da Turma</label>
+                        <label class="form-label" for="class_code">Código de Acesso</label>
                         <div class="col-10 col-md-6 mb-4">
                             <input class="form-control" type="text" id="class_code" name="class_code" required>
                         </div>

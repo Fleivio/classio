@@ -13,22 +13,28 @@
             {% include "sidebar.jinja" %}
 
             <div class="col-md-9">
-                <h2>Classio</h2>
-                <p>Bem-vindo de volta, {{user_data.username}}!</p>
 
-                <h3 class="mt-3">Minhas Turmas</h3>
+                <h2>Minhas Turmas</h2>
+                {% if user_data.classes_professor %}
                 <ul class="list-group mt-3">
                     {%for class in user_data.classes_professor%}
                         <a href={{"/class?class_id=" + class.class_id}} class="list-group-item list-group-item-action">{{class.class_name}}</a>
                     {%endfor%}
                 </ul>
+                {% else %}
+                    <p class="lead">Você ainda não é professor de nenhuma turma.</p>
+                {% endif %}
 
-                <h3 class="mt-3">Turmas Como Convidado</h3>
+                <h2 class="mt-3">Minhas Disciplinas</h2>
+                {% if user_data.classes_student %}
                 <ul class="list-group mt-3">
-                    {%for class in user_data.classes_student%}
+                    {% for class in user_data.classes_student %}
                         <a href={{"/class?class_id=" + class.class_id}} class="list-group-item list-group-item-action">{{class.class_name}}</a>
-                    {%endfor%}
+                    {% endfor %}
                 </ul>
+                {% else %}
+                    <p class="lead">Você ainda não participa de nenhuma disciplina.</p> 
+                {% endif %}
             </div>
         </div>
     </div>
