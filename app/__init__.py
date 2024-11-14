@@ -6,8 +6,8 @@ from .config import Config
 
 from app.models import db
 from app.routes.index import index
-from app.routes.class_ import class_
-from app.routes.user import user
+from app.routes.class_api import class_
+from app.routes.user_api import user
 
 def create_app():
     app = Flask(__name__)
@@ -17,8 +17,8 @@ def create_app():
     db.init_app(app)
     Migrate(app, db)
 
-    app.register_blueprint(user)
     app.register_blueprint(index)
-    app.register_blueprint(class_)
+    app.register_blueprint(user, url_prefix='/user')
+    app.register_blueprint(class_, url_prefix='/class')
 
     return app
