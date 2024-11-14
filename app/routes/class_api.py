@@ -1,5 +1,5 @@
 from app.models import Class, db
-from flask import Blueprint, request
+from flask import Blueprint, request, render_template
 
 from .index import get_active_token
 
@@ -25,4 +25,8 @@ def create():
     db.session.commit()
 
     return 'class created', 201
+
+@class_.get('/create')
+def class_get_create():
+    return render_template("class_create.jinja")
 
