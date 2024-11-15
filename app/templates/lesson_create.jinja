@@ -14,10 +14,9 @@
 
                     <h2 class="mb-2">Criar Aula</h2>
 
-                    <p class="lead">Crie uma aula para a turma {{ class_name }}.</p>
+                    <p class="lead">Crie uma aula para a turma {{ class_data.class_name }}.</p>
 
-                    <form action="/lesson/create" id="lessonCreateForm" method="post">
-
+                    <form action={{"/lesson/create?class_id=" + class_data.class_id}} id="lessonCreateForm" method="post">
                         <label class="form-label" for="title">Título</label>
                         <div class="col-10 col-md-6 mb-4">
                             <input class="form-control" type="text" id="title" name="title" required>

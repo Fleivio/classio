@@ -9,3 +9,11 @@ class Lesson(db.Model):
     class_id = db.Column(db.Integer, db.ForeignKey('class.class_id'), nullable=False) 
 
     class_ = db.relationship('Class', backref='lessons')
+
+    def to_dict(self):
+        return {
+            "lesson_id": str(self.lesson_id),
+            "title": self.title,
+            "description": self.description,
+            "class_id": str(self.class_id)
+        }
