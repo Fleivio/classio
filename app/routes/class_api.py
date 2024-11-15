@@ -1,6 +1,8 @@
 from app.models import Class, db
 from flask import Blueprint, request, render_template
 
+from app.models.model_lesson import Lesson
+
 from .index import get_active_token
 
 class_ = Blueprint('class_', __name__)
@@ -9,8 +11,18 @@ class_ = Blueprint('class_', __name__)
 def class_get_class():
     class_id = request.args.get('class_id')
     class_ = Class.query.filter_by(class_id=class_id).first()
-    # lessons = ?
-    return render_template("class_professor.jinja", class_data=class_)
+    lessons = Lesson.query.filter_by(class_id=class_id).all() 
+
+    data = {
+        "class_": class_,
+        "lessons": lessons
+    }
+
+    return render_template("class_professor.jinja", data=data)
+
+@class_.get('/lesson')
+def class_get_lesson():
+    return "doaijsdoi"
 
 @class_.post('/create')
 def create():
