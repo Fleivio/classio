@@ -1,10 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Classio</title>
-</head>
-<body>
-    <h2>Criando Nova Aula</h2>
-    
-    <!-- forms aqui -->
-</body>
+{% extends "base.jinja" %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="row gx-5 gy-3">
+            {% include "sidebar.jinja" %}
+            
+            <div class="col-md-9">
+                <div class="container">
+
+                    <h2 class="mb-2">Criar Aula</h2>
+
+                    <p class="lead">Crie uma aula para a turma {{ class_name }}.</p>
+
+                    <form action="/lesson/create" id="lessonCreateForm" method="post">
+
+                        <label class="form-label" for="title">Título</label>
+                        <div class="col-10 col-md-6 mb-4">
+                            <input class="form-control" type="text" id="title" name="title" required>
+                        </div>
+
+                        <label class="form-label" for="lesson_description">Descrição</label>
+                        <div class="col-10 col-md-6 mb-4">
+                            <textarea class="form-control" id="lesson_description" name="lesson_description" rows="6" required></textarea>
+                        </div>
+
+                        <button class="btn btn-primary" type="submit">Adicionar</button>
+                    </form>
+
+                    <div id="message">
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <p style="color: red;">{{ message }}</p>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

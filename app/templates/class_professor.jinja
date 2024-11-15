@@ -12,13 +12,13 @@
                 <h2>{{ class_data.class_name + " - Professor"}}</h2>
                 <p class="lead">{{ class_data.class_description }}</p>
 
-                <div class="container mb-3">
+                <div class="container">
                     <div class="row">
                         <div class="col gx-0">
                             <h3>Aulas</h3>
                         </div>
                         <div class="col gx-0 text-end">
-                            <button class="btn btn-primary">Adicionar</button>
+                            <a href={{"/lesson/{}/create".format(data.class_.class_id)}} class="btn btn-primary" role="button">Adicionar</a>
                         </div>
                     </div>
                 </div>
