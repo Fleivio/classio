@@ -9,7 +9,7 @@
         <div class="row gx-5 gy-3">
             {% include "sidebar.jinja" %}
             <div class="col-md-9">
-                <h2>{{ class_data.class_name }}</h2>
+                <h2>{{ class_data.class_name + " - Professor"}}</h2>
                 <p class="lead">{{ class_data.class_description }}</p>
 
                 <div class="container mb-3">
@@ -23,8 +23,12 @@
                     </div>
                 </div>
                 <ul class="list-group">
-                    {% for lesson in range(0, 4) %}
-                        <a class="list-group-item list-group-item-active" href={{ "/lesson?lessonId=" + "lesson.id" }}>Aula {{lesson + 1}}</a>
+                    {% for lesson in class_data.lessons %}
+                        <a class="list-group-item list-group-item-active" 
+                           href={{ "/lesson?lesson_id=" + lesson.lesson_id }}
+                            >
+                           Aula {{lesson.lesson_title}}
+                        </a>
                     {% endfor %}
                 </ul>
             </div>

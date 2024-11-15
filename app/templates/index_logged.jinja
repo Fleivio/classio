@@ -16,7 +16,7 @@
                 {% if user_data.classes_professor %}
                 <ul class="list-group mt-3">
                     {%for class in user_data.classes_professor%}
-                        <a href={{"/class?class_id=" + class.class_id}} class="list-group-item list-group-item-action">{{class.class_name}}</a>
+                        <a href={{"/class/edit?class_id=" + class.class_id}} class="list-group-item list-group-item-action">{{class.class_name}}</a>
                     {%endfor%}
                 </ul>
                 {% else %}
