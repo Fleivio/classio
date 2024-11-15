@@ -19,21 +19,21 @@ def index_screen():
     if get_active_token():
         return redirect("/home")
     else:
-        return render_template("index.jinja")
+        return render_template("home/index.jinja")
 
 
 @index.get("/login")
 def login_get():
     if get_active_token():
         return redirect("/")
-    return render_template("login.jinja")
+    return render_template("home/login.jinja")
 
 
 @index.get("/signup")
 def signup_get():
     if get_active_token():
         return redirect("/")
-    return render_template("sign_up.jinja")
+    return render_template("home/sign_up.jinja")
 
 
 @index.get("/home")
@@ -65,4 +65,4 @@ def user_home():
         "username": user.username,
     }
 
-    return render_template("index_logged.jinja", user_data=user_data)
+    return render_template("home/index_logged.jinja", user_data=user_data)

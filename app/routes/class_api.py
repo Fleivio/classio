@@ -13,7 +13,7 @@ def class_get_class():
 
     class_ = Class.query.filter_by(class_id=class_id).first()
 
-    return render_template("class_student.jinja", class_data=class_.to_dict())
+    return render_template("class/class_student.jinja", class_data=class_.to_dict())
 
 @class_.get('/edit')
 def class_get_edit():
@@ -24,7 +24,7 @@ def class_get_edit():
 
     class_ = Class.query.filter_by(class_id=class_id).first()
 
-    return render_template("class_professor.jinja", class_data=class_.to_dict())
+    return render_template("class/class_professor.jinja", class_data=class_.to_dict())
 
 # @class_.put('/edit')
 # def class_put_edit():
@@ -57,7 +57,7 @@ def class_post_create():
     class_description = request.form.get('class_description')
 
     if not class_name or not class_description:
-        return render_template("class_create.jinja")
+        return render_template("class/class_create.jinja")
 
     class_ = Class(class_name=class_name, class_description=class_description, professor_id=token.user_id)
     db.session.add(class_)
@@ -71,14 +71,14 @@ def class_get_create():
     if not token:
         return redirect('/')
 
-    return render_template("class_create.jinja")
+    return render_template("class/class_create.jinja")
 
 @class_.get('/join')
 def class_get_join():
     token = get_active_token()
     if not token:
         return redirect('/')
-    return render_template("class_join.jinja")
+    return render_template("class/class_join.jinja")
 
 @class_.post('/join')
 def class_post_join():

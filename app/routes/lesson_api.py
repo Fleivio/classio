@@ -22,7 +22,7 @@ def lesson_get():
     if not Class.usr_has_access_student(class_.class_id, get_active_token()):
         return 'sem acesso'
 
-    return render_template("lesson.jinja", lesson_data=lesson.to_dict())
+    return render_template("lesson/lesson.jinja", lesson_data=lesson.to_dict())
 
 @lesson.get('/edit')
 def lesson_professor_get():
@@ -42,7 +42,7 @@ def lesson_professor_get():
     if not Class.usr_has_access_professor(class_.class_id, get_active_token()):
         return redirect('/')
 
-    return render_template("lesson.jinja", lesson_data=lesson.to_dict())
+    return render_template("lesson/lesson.jinja", lesson_data=lesson.to_dict())
 
 
 @lesson.post("/create")
@@ -73,4 +73,4 @@ def lesson_get_create():
     if not class_:
         return redirect('/')
 
-    return render_template("lesson_create.jinja", class_data=class_.to_dict())
+    return render_template("lesson/lesson_create.jinja", class_data=class_.to_dict())
