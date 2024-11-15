@@ -1,7 +1,7 @@
-from app.config import Config
 from app.models import Token, User, db
 from app.routes.index import get_active_token
-from flask import Blueprint, make_response, redirect, request
+from flask import *
+from app.config import Config
 
 user = Blueprint('user', __name__)
 
@@ -11,15 +11,18 @@ def login():
     password = request.form.get("password")
 
     if not email or not password:
-        return 'Missing email or password', 400
+        flash('Invalid email or password', 'error')
+        return redirect('/login')
     
     u = User.query.filter_by(email=email).first()
 
     if not u:
-        return 'User not found', 404
+        flash('Invalid email', 'error')
+        return redirect('/login')
     
     if not u.check_password(password):
-        return 'Invalid password', 401
+        flash('Invalid password', 'error')
+        return redirect('/login')
     
     token = Token.generate_token(u)
     response = make_response(redirect("/"))

@@ -75,28 +75,35 @@ def class_get_create():
 
 @class_.get('/join')
 def class_get_join():
+    token = get_active_token()
+    if not token:
+        return redirect('/')
     return render_template("class_join.jinja")
 
 @class_.post('/join')
 def class_post_join():
-    id = request.form.get('class_code')
-    
-    if not id:
-        return redirect('/')
-
-    cl = Class.query.filter_by(class_id=id).first()
-    if not cl:
-        return 'Class not found', 404
-    
-    if Class.usr_has_access_professor(id, get_active_token()):
-        return 'You are the professor of this class', 400
-    
-    if Class.usr_has_access_student(id, get_active_token()):
-        return 'You are already enrolled in this class', 400
-    
     token = get_active_token()
     if not token:
         return redirect('/')
+    
+    id = request.form.get('class_code')
+    cl = Class.query.filter_by(class_id=id).first()
+    if not id or not cl:
+        flash('Invalid class code', 'error')
+        return redirect('/class/join')
+
+    cl = Class.query.filter_by(class_id=id).first()
+    if not cl:
+        flash('Class not found', 'error')
+        return redirect('/class/join')
+    
+    if Class.usr_has_access_professor(id, get_active_token()):
+        flash('You are the professor of this class', 'error')
+        return redirect('/class/join')
+    
+    if Class.usr_has_access_student(id, get_active_token()):
+        flash('You are already enrolled in this class', 'error')
+        return redirect('/class/join')
     
     enrollment = Enrollment(student_id=token.user_id, class_id=id)
     db.session.add(enrollment)
