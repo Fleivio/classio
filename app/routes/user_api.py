@@ -5,6 +5,8 @@ from app.config import Config
 
 user = Blueprint('user', __name__)
 
+# POST
+
 @user.post("/login")
 def login():
     email = request.form.get("email")
@@ -29,7 +31,7 @@ def login():
     response.set_cookie(Config.TOKEN_NAME, token.token)
     return response
 
-@user.get('/logout')
+@user.post('/logout')
 def logout():
     token = get_active_token()
 

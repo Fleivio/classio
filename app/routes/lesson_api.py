@@ -4,6 +4,8 @@ from .index import get_active_token
 
 lesson = Blueprint('lesson', __name__)
 
+# GET 
+
 @lesson.get('')
 def lesson_get():
     lesson_id = request.args.get("lesson_id")
@@ -23,6 +25,20 @@ def lesson_get():
         return 'sem acesso'
 
     return render_template("lesson/lesson.jinja", lesson_data=lesson.to_dict())
+
+@lesson.get("/create")
+def lesson_get_create():
+    class_id = request.args.get("class_id")
+
+    if not Class.usr_has_access_professor(class_id, get_active_token()):
+        return redirect('/')
+
+    class_ = Class.query.filter_by(class_id=class_id).first()
+
+    if not class_:
+        return redirect('/')
+
+    return render_template("lesson/lesson_create.jinja", class_data=class_.to_dict())
 
 @lesson.get('/edit')
 def lesson_professor_get():
@@ -44,6 +60,7 @@ def lesson_professor_get():
 
     return render_template("lesson/lesson.jinja", lesson_data=lesson.to_dict())
 
+# POST
 
 @lesson.post("/create")
 def lesson_post_create():
@@ -60,17 +77,3 @@ def lesson_post_create():
     db.session.commit()
 
     return redirect(f"/class?class_id={class_id}")
-
-@lesson.get("/create")
-def lesson_get_create():
-    class_id = request.args.get("class_id")
-
-    if not Class.usr_has_access_professor(class_id, get_active_token()):
-        return redirect('/')
-
-    class_ = Class.query.filter_by(class_id=class_id).first()
-
-    if not class_:
-        return redirect('/')
-
-    return render_template("lesson/lesson_create.jinja", class_data=class_.to_dict())
