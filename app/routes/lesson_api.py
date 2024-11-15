@@ -76,4 +76,4 @@ def lesson_post_create():
     db.session.add(lesson)
     db.session.commit()
 
-    return redirect(f"/class?class_id={class_id}")
+    return redirect(f"/lesson/edit?lesson_id={lesson.lesson_id}")
