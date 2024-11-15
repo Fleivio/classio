@@ -25,7 +25,7 @@
                 <ul class="list-group">
                     {% for lesson in class_data.lessons %}
                         <a class="list-group-item list-group-item-active" 
-                           href={{ "/lesson?lesson_id=" + lesson.lesson_id }}
+                           href={{ "/lesson/edit?lesson_id=" + lesson.lesson_id }}
                             >
                            Aula {{lesson.lesson_title}}
                         </a>

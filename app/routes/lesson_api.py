@@ -10,6 +10,26 @@ def lesson_get():
     lesson = Lesson.query.filter_by(lesson_id=lesson_id).first()
 
     if not lesson:
+        return 'sem lesson'
+
+    class_ = Class.query.filter_by(class_id=lesson.class_id).first()
+
+    if not class_:
+        return 'sem class'
+    
+    print(class_.class_id)
+    
+    if not Class.usr_has_access_student(class_.class_id, get_active_token()):
+        return 'sem acesso'
+
+    return render_template("lesson.jinja", lesson_data=lesson.to_dict())
+
+@lesson.get('/edit')
+def lesson_professor_get():
+    lesson_id = request.args.get("lesson_id")
+    lesson = Lesson.query.filter_by(lesson_id=lesson_id).first()
+
+    if not lesson:
         return redirect('/')
 
     class_ = Class.query.filter_by(class_id=lesson.class_id).first()
@@ -17,10 +37,13 @@ def lesson_get():
     if not class_:
         return redirect('/')
     
-    if not Class.usr_has_access_student(class_.class_id, get_active_token()):
+    print(class_.class_id)
+    
+    if not Class.usr_has_access_professor(class_.class_id, get_active_token()):
         return redirect('/')
 
     return render_template("lesson.jinja", lesson_data=lesson.to_dict())
+
 
 @lesson.post("/create")
 def lesson_post_create():
