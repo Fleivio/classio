@@ -6,27 +6,45 @@ class_ = Blueprint('class_', __name__)
 
 @class_.get('')
 def class_get_class():
-    if not Class.usr_has_access_student(request.args.get('class_id'), get_active_token()):
+    class_id = request.args.get('class_id')
+
+    if not Class.usr_has_access_student(class_id, get_active_token()):
         return redirect('/')
 
-    class_id = request.args.get('class_id')
     class_ = Class.query.filter_by(class_id=class_id).first()
-
-    # TODO get lessons here
 
     return render_template("class_student.jinja", class_data=class_.to_dict())
 
 @class_.get('/edit')
 def class_get_edit():
-    if not Class.usr_has_access_professor(request.args.get('class_id'), get_active_token()):
+    class_id = request.args.get('class_id')
+
+    if not Class.usr_has_access_professor(class_id, get_active_token()):
         return redirect('/')
 
-    class_id = request.args.get('class_id')
     class_ = Class.query.filter_by(class_id=class_id).first()
 
-    # TODO get lessons here
-
     return render_template("class_professor.jinja", class_data=class_.to_dict())
+
+# @class_.put('/edit')
+# def class_put_edit():
+#     class_id = request.args.get('class_id')
+
+#     if not Class.usr_has_access_professor(class_id, get_active_token()):
+#         return redirect('/')
+
+#     class_name = request.form.get('class_name')
+#     class_description = request.form.get('class_description')
+
+#     if not class_name or not class_description:
+#         return redirect('/class/edit?class_id=' + class_id)
+    
+#     class_ = Class.query.filter_by(class_id=class_id).first()
+#     class_.class_name = class_name
+#     class_.class_description = class_description
+#     db.session.commit()
+
+#     return redirect('/class/edit?class_id=' + class_id)
 
 @class_.post('/create')
 def class_post_create():
