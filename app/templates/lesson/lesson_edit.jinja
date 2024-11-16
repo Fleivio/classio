@@ -11,13 +11,20 @@
             
             <div class="col-md-9">
                 <h2>{{ lesson.title }}</h2>
+                <h6><a href = {{"/class/edit?class_id=" ~ lesson.class_.class_id}}>{{ lesson.class_.class_name }}</a></h6>
                 <p class="lead">{{ lesson.description }}</p>
 
                 <h4 class="mt-4">Minhas Perguntas</h4>
                 {% if lesson.questions %}
                 <ul class="list-group mt-3">
                     {%for question in lesson.questions %}
-                        <a href="/home" class="list-group-item list-group-item-action"></a>
+                        <p>{{question.title}}</p>
+                        <span>{{question.description}}</span>
+                        <div>
+                            {# {{% for answer is question.answers %}} #}
+                        </div>
+                        <hr>
+                        {# <a href="/home" class="list-group-item list-group-item-action"></a> #}
                     {%endfor%}
                 </ul>
                 {% else %}
@@ -32,10 +39,13 @@
                     </p>
                     <div style="min-height: 120px;">
                       <div class="collapse" id="collapseWidthExample">
-                      <form action={{ "/lesson/edit?lesson_id=" + lesson.lesson_id }} id="classJoinForm" method="post">
-                          <label class="form-label" for="lesson_question">Envie uma pergunta à sua turma.</label>
+                      <form action={{ "/lesson/add_question?lesson_id=" ~ lesson.lesson_id }} id="classJoinForm" method="post">
+                          <label class="form-label" for="question_body">Envie uma pergunta à sua turma.</label>
+                          
+                            <input class="form-control" type="text" id="question_title" name="question_title" required>
+                          
                           <div class="col-10 col-md-6 mb-4">
-                              <textarea class="form-control" id="lesson_question" name="lesson_question" rows="5" required></textarea>
+                              <textarea class="form-control" id="question_body" name="question_body" rows="5" required></textarea>
                           </div>
                           <button class="btn btn-secondary" type="submit">Submeter</button>
                       </form>

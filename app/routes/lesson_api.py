@@ -1,6 +1,7 @@
-from app.models import Class, Lesson, db
+from app.models import Class, Lesson, db, Question
 from flask import *
 from .index import get_active_token
+from datetime import datetime, timedelta, timezone
 
 lesson = Blueprint('lesson', __name__)
 
@@ -24,7 +25,7 @@ def lesson_get():
     if not Class.usr_has_access_student(class_.class_id, get_active_token()):
         return 'sem acesso'
 
-    return render_template("lesson/lesson.jinja", lesson_data=lesson.to_dict())
+    return render_template("lesson/lesson_student.jinja", lesson=lesson)
 
 @lesson.get("/create")
 def lesson_get_create():
@@ -60,7 +61,7 @@ def lesson_professor_get():
 
     # lesson.questions com as perguntas
 
-    return render_template("lesson/lesson_edit.jinja", lesson=lesson.to_dict())
+    return render_template("lesson/lesson_edit.jinja", lesson=lesson)
 
 # POST
 
@@ -83,4 +84,33 @@ def lesson_post_create():
 @lesson.post("/edit")
 def lesson_post_edit():
     lesson_id = request.args.get("lesson_id")
+    return redirect(f"/lesson/edit?lesson_id={lesson_id}")
+
+@lesson.post("/add_question")
+def lesson_post_question():
+    lesson_id = request.args.get("lesson_id")
+
+    if not lesson_id:
+        return redirect('/')
+    
+    lesson = Lesson.query.filter_by(lesson_id=lesson_id).first()
+
+    if not lesson:
+        return redirect('/')
+    
+    class_ = lesson.class_id
+
+    if not Class.usr_has_access_professor(class_, get_active_token()):
+        return redirect('/')
+
+    title = request.form.get("question_title")
+    question = request.form.get("question_body")
+    date_created = datetime.now(timezone.utc) 
+
+    print(title, question, date_created)
+
+    question = Question(lesson_id=lesson_id, title=title, description=question, date_created=date_created, is_multiple_choice=False)
+    db.session.add(question)
+    db.session.commit()
+
     return redirect(f"/lesson/edit?lesson_id={lesson_id}")

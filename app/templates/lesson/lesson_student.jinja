@@ -1,0 +1,36 @@
+{% extends "base.jinja" %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="row gx-5 gy-3">
+            {% include "sidebar.jinja" %}
+            
+            <div class="col-md-9">
+                <h2>{{ lesson.title }}</h2>
+                <h6><a href = {{"/class?class_id=" ~ lesson.class_.class_id}}>{{ lesson.class_.class_name }}</a></h6>
+                <p class="lead">{{ lesson.description }}</p>
+
+                <h4 class="mt-4">Perguntas do Professor</h4>
+                {% if lesson.questions %}
+                <ul class="list-group mt-3">
+                    {%for question in lesson.questions %}
+                        <p>{{question.title}}</p>
+                        <span>{{question.description}}</span>
+                        <div>
+                            {# {{% for answer is question.answers %}} #}
+                        </div>
+                        <hr>
+                    {%endfor%}
+                </ul>
+                {% else %}
+                    <p>Você ainda não perguntou nada à turma nesta aula.</p>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
