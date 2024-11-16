@@ -58,7 +58,9 @@ def lesson_professor_get():
     if not Class.usr_has_access_professor(class_.class_id, get_active_token()):
         return redirect('/')
 
-    return render_template("lesson/lesson.jinja", lesson_data=lesson.to_dict())
+    # lesson.questions com as perguntas
+
+    return render_template("lesson/lesson_edit.jinja", lesson=lesson.to_dict())
 
 # POST
 
@@ -77,3 +79,8 @@ def lesson_post_create():
     db.session.commit()
 
     return redirect(f"/lesson/edit?lesson_id={lesson.lesson_id}")
+
+@lesson.post("/edit")
+def lesson_post_edit():
+    lesson_id = request.args.get("lesson_id")
+    return redirect(f"/lesson/edit?lesson_id={lesson_id}")

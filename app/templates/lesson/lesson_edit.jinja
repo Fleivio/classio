@@ -1,0 +1,48 @@
+{% extends "base.jinja" %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="row gx-5 gy-3">
+            {% include "sidebar.jinja" %}
+            
+            <div class="col-md-9">
+                <h2>{{ lesson.title }}</h2>
+                <p class="lead">{{ lesson.description }}</p>
+
+                <h4 class="mt-4">Minhas Perguntas</h4>
+                {% if lesson.questions %}
+                <ul class="list-group mt-3">
+                    {%for question in lesson.questions %}
+                        <a href="/home" class="list-group-item list-group-item-action"></a>
+                    {%endfor%}
+                </ul>
+                {% else %}
+                    <p>Você ainda não perguntou nada à turma nesta aula.</p>
+                {% endif %}
+
+                <div class="container mt-4 gx-0">
+                    <p>
+                        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample">
+                            Perguntar 
+                        </button>
+                    </p>
+                    <div style="min-height: 120px;">
+                      <div class="collapse" id="collapseWidthExample">
+                      <form action={{ "/lesson/edit?lesson_id=" + lesson.lesson_id }} id="classJoinForm" method="post">
+                          <label class="form-label" for="lesson_question">Envie uma pergunta à sua turma.</label>
+                          <div class="col-10 col-md-6 mb-4">
+                              <textarea class="form-control" id="lesson_question" name="lesson_question" rows="5" required></textarea>
+                          </div>
+                          <button class="btn btn-secondary" type="submit">Submeter</button>
+                      </form>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
