@@ -7,28 +7,35 @@
 {% block content %}
     <div class="container mt-5">
         <div class="row gx-5 gy-3">
-            {% include "sidebar.jinja" %}
-            
-            <div class="col-md-9">
-                <h2>{{ lesson.title }}</h2>
-                <h6><a href = {{"/class?class_id=" ~ lesson.class_.class_id}}>{{ lesson.class_.class_name }}</a></h6>
-                <p class="lead">{{ lesson.description }}</p>
+        {% include "sidebar.jinja" %}
+        
+        <div class="col-md-9">
+            <h2>{{ lesson.title }}</h2>
+            <h6><a href = {{"/class?class_id=" ~ lesson.class_.class_id}}>{{ lesson.class_.class_name }}</a></h6>
+            <p class="lead">{{ lesson.description }}</p>
 
-                <h4 class="mt-4">Perguntas do Professor</h4>
-                {% if lesson.questions %}
-                <ul class="list-group mt-3">
-                    {%for question in lesson.questions %}
-                        <p>{{question.title}}</p>
-                        <span>{{question.description}}</span>
-                        <div>
-                            {# {{% for answer is question.answers %}} #}
-                        </div>
-                        <hr>
-                    {%endfor%}
-                </ul>
-                {% else %}
-                    <p>Você ainda não perguntou nada à turma nesta aula.</p>
-                {% endif %}
+            <h4 class="mt-4">Perguntas do Professor</h4>
+            <hr>
+            {% if lesson.questions %}
+            <ul class="list-group mt-3">
+              <form method="post" action={{"/lesson/add_answers?lesson_id=" ~ lesson.lesson_id}}>
+                {%for question in lesson.questions %}
+                    <p>{{question.title}}</p>
+                    <label for={{"qid" ~ question.question_id}}>{{question.description}}</label>
+                    <div class="col-10 col md-6 mb-4">
+                        <textarea class="form-control" 
+                                  id={{"qid" ~ question.question_id}}
+                                  name={{"qid" ~ question.question_id }} 
+                                  rows="3"></textarea>
+                    </div>
+                    <hr>
+                {%endfor%}
+                <button class="btn btn-primary" type="submit">Responder</button>
+                </form>
+            </ul>
+            {% else %}
+                <p>Você ainda não perguntou nada à turma nesta aula.</p>
+            {% endif %}
 
             </div>
         </div>

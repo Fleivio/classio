@@ -20,8 +20,12 @@
                     {%for question in lesson.questions %}
                         <p>{{question.title}}</p>
                         <span>{{question.description}}</span>
+                        <span>repostas:</span>
                         <div>
-                            {# {{% for answer is question.answers %}} #}
+                            {% for answer in question.answers %}
+                                <br>
+                                <p>{{answer.answer}}</p>
+                            {%endfor%}
                         </div>
                         <hr>
                         {# <a href="/home" class="list-group-item list-group-item-action"></a> #}
@@ -42,7 +46,7 @@
                       <form action={{ "/lesson/add_question?lesson_id=" ~ lesson.lesson_id }} id="classJoinForm" method="post">
                           <label class="form-label" for="question_body">Envie uma pergunta à sua turma.</label>
                           
-                            <input class="form-control" type="text" id="question_title" name="question_title" required>
+                          <input class="form-control" type="text" id="question_title" name="question_title" required>
                           
                           <div class="col-10 col-md-6 mb-4">
                               <textarea class="form-control" id="question_body" name="question_body" rows="5" required></textarea>

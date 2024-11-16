@@ -1,4 +1,4 @@
-from app.models import Class, Lesson, db, Question
+from app.models import Class, Lesson, db, Question, Answer
 from flask import *
 from .index import get_active_token
 from datetime import datetime, timedelta, timezone
@@ -114,3 +114,34 @@ def lesson_post_question():
     db.session.commit()
 
     return redirect(f"/lesson/edit?lesson_id={lesson_id}")
+
+@lesson.post("/add_answers")
+def lesson_post_add_answers():
+    lesson_id = request.args.get("lesson_id")
+    
+    lesson = Lesson.query.filter_by(lesson_id=lesson_id).first()
+
+    if not lesson:
+        return redirect('/')
+    
+    class_ = lesson.class_id
+
+    if not Class.usr_has_access_student(class_, get_active_token()):
+        return redirect('/')
+    
+    for key, answer in request.form.to_dict().items():
+        if not answer:
+            continue
+        
+        question_id = int(key[3:])
+        uid = get_active_token().user_id
+        date_now = datetime.now(timezone.utc)
+        answer = Answer(answer=answer, 
+                        date_created=date_now,
+                        student_id=uid,
+                        question_id=question_id)
+        
+        db.session.add(answer)
+        db.session.commit()
+
+    return redirect(f"/lesson?lesson_id={lesson_id}")

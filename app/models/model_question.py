@@ -14,6 +14,18 @@ class Question(db.Model):
 
     lesson = db.relationship('Lesson', backref='questions')
 
+class Answer(db.Model):
+    __tablename__ = 'answer'
+
+    answer_id = db.Column(db.Integer, primary_key=True)
+    answer = db.Column(db.Text, nullable=False)
+    date_created = db.Column(db.DateTime, nullable=False)
+    student_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    question_id = db.Column(db.Integer, db.ForeignKey('question.question_id'), nullable=False)
+
+    question = db.relationship('Question', backref='answers')
+    student = db.relationship('User', backref='answers')
+
 # class Option(db.Model):
 #     __tablename__ = 'option'
 
@@ -23,17 +35,7 @@ class Question(db.Model):
 
 #     question = db.relationship('Question', backref='options')
 
-# class Answer(db.Model):
-#     __tablename__ = 'answer'
 
-#     answer_id = db.Column(db.Integer, primary_key=True)
-#     answer = db.Column(db.Text)
-#     date_created = db.Column(db.DateTime, nullable=False)
-#     student_id = db.Column(db.Integer, db.ForeignKey('student.student_id'), nullable=False)
-#     question_id = db.Column(db.Integer, db.ForeignKey('question.question_id'), nullable=False)
-
-#     question = db.relationship('Question', backref='answers')
-#     student = db.relationship('Student', backref='answers')
 
 # class OptionAnswer(db.Model):
 #     __tablename__ = 'option_answer'
