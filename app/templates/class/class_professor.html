@@ -9,13 +9,36 @@
         <div class="row gx-5 gy-3">
             {% include "sidebar.html" %}
             <div class="col-md-9">
+                
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb fs-3">
-                        <li class="breadcrumb-item active" aria-current="page">{{ class_data.class_name }}</li>
+                        <li class="breadcrumb-item active d-flex justify-content-between align-items-center" aria-current="page">
+                            <span id="class-params-display">
+                                <p id="class-name-display">{{ class_data.class_name }}</p>
+                                <p class="" id="class-desc-display">{{ class_data.class_description }}</p>
+                            </span>
+
+                            <input id="class-name-input" 
+                                   class="form-control d-none" 
+                                   type="text" 
+                                   value="{{ class_data.class_name }}">
+
+                            <input id="class-desc-input" 
+                                   class="form-control d-none" 
+                                   type="text" 
+                                   value="{{ class_data.class_description }}">
+                            
+                            <!-- Botões -->
+                            <div class="ms-3">
+                                <button class="btn btn-sm btn-secondary" id="edit-btn" onclick="toggleEdit()">Editar</button>
+                                <button class="btn btn-sm btn-primary d-none" id="save-btn" onclick={{"saveEdit(" ~ class_data.class_id ~ ")"}}>Salvar</button>
+                                <button class="btn btn-sm btn-secondary d-none" id="cancel-btn" onclick="toggleEdit()">Cancelar</button>
+                            </div>
+                        </li>
                     </ol>
                 </nav>
+                
 
-                <p>{{ class_data.class_description }}</p>
                 <p>Código de inscrição: {{ class_data.class_id }}</p>
 
                 <div class="container">
@@ -42,4 +65,62 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function toggleEdit() {
+            const displaySpan = document.getElementById('class-params-display');
+            const inputField = document.getElementById('class-name-input');
+            const descField = document.getElementById('class-desc-input');
+            const editBtn = document.getElementById('edit-btn');
+            const saveBtn = document.getElementById('save-btn');
+            const cancelBtn = document.getElementById('cancel-btn');
+    
+            if (inputField.classList.contains('d-none')) {
+                displaySpan.classList.add('d-none');
+                inputField.classList.remove('d-none');
+                descField.classList.remove('d-none')
+                editBtn.classList.add('d-none');
+                saveBtn.classList.remove('d-none');
+                cancelBtn.classList.remove('d-none');
+            } else {
+                displaySpan.classList.remove('d-none');
+                inputField.classList.add('d-none');
+                descField.classList.add('d-none');
+                editBtn.classList.remove('d-none');
+                saveBtn.classList.add('d-none');
+                cancelBtn.classList.add('d-none');
+            }
+        }
+    
+        function saveEdit(class_id) {
+            const inputField = document.getElementById('class-name-input');
+            const descField = document.getElementById('class-desc-input');
+            const newClassName = inputField.value;
+            const newClassDesc = descField.value;
+    
+            fetch('/class/edit_params?class_id=' + class_id, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    class_id: "{{ class_data.class_id }}",
+                    class_name: newClassName,
+                    class_desc: newClassDesc,
+                }),
+            })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('class-name-display').innerText = newClassName;
+                    document.getElementById('class-desc-display').innerText = newClassDesc;
+                    toggleEdit();
+                } else {
+                    alert('Erro ao salvar a alteração.');
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao salvar:', error);
+            });
+        }
+    </script>
 {% endblock %}

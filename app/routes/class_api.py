@@ -124,24 +124,25 @@ def class_post_kickout():
 
     return redirect('/class/enrollments?class_id=' + class_id)
 
-# PUT
+@class_.post('/edit_params')
+def edit_class_name():
+    print('aaaaa')
 
-# @class_.put('/edit')
-# def class_put_edit():
-#     class_id = request.args.get('class_id')
+    if not Class.usr_has_access_professor(request.args.get('class_id'), get_active_token()):
+        return redirect('/')
 
-#     if not Class.usr_has_access_professor(class_id, get_active_token()):
-#         return redirect('/')
+    data = request.get_json()
+    class_id = data.get('class_id')
+    new_name = data.get('class_name')
+    new_desc = data.get('class_desc')
 
-#     class_name = request.form.get('class_name')
-#     class_description = request.form.get('class_description')
+    print(class_id, new_name)
 
-#     if not class_name or not class_description:
-#         return redirect('/class/edit?class_id=' + class_id)
-    
-#     class_ = Class.query.filter_by(class_id=class_id).first()
-#     class_.class_name = class_name
-#     class_.class_description = class_description
-#     db.session.commit()
-
-#     return redirect('/class/edit?class_id=' + class_id)
+    class_instance = Class.query.get(class_id)
+    if class_instance:
+        class_instance.class_name = new_name
+        class_instance.class_description = new_desc
+        db.session.commit()
+        return jsonify({"message": "Class name updated successfully"}), 200
+    else:
+        return jsonify({"error": "Class not found"}), 404
