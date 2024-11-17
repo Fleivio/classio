@@ -1,8 +1,12 @@
 professor editar perguntas
 professor editar aula
 professor editar turma 
+aluno poder editar resposta no forum
+aluno poder editar pergunta no forum
+aluno e professor poder editar perfil
 - isso é muito chato sem javascript eu tentei no branch flavio mas não dá, fica horrível
 - melhor deixar assim mesmo
 
 professor poder ver quem respondeu no forum?
+professor poder apagar mensanges do forum?
 alunos não poderiam para manter anonimas as perguntas
