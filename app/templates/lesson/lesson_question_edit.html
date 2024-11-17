@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="row gx-5 gy-3">
+            {% include "sidebar.html" %}
+            
+            <div class="col-md-9">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb fs-3">
+                        <li class="breadcrumb-item">
+                            <a href={{ "/class/edit?class_id=" ~ class_.class_id }}>{{ class_.class_name }}</a>
+                        </li>
+                        <li class="breadcrumb-item" aria-current="page">
+                            <a href={{ "/lesson/edit?lesson_id=" ~ lesson.lesson_id }}>{{ lesson.title }}</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Respostas</li>
+                    </ol>
+                </nav>
+
+                <h4>{{ question.title }}</h4>
+                <p>{{ question.description }}</p>
+
+                <h4 class="mt-4">Respostas</h4>
+                {% if answers %}
+
+                    <ul class="list-group list-group-flush">
+                        <div class="accordion" id="accordion">
+                        {% for answer in answers %}
+                            <li class="list-group-item">
+                                <p>{{ answer.answer }}</p>
+                            </li>
+                        {% endfor %}
+                        </div>
+                    </ul>
+                    {% else %}
+                        <p>Nenhum aluno respondeu a esta pergunta ainda.</p>
+                    {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
