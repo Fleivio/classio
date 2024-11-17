@@ -24,10 +24,15 @@ def lesson_get():
     
     if not Class.usr_has_access_student(class_.class_id, get_active_token()):
         return 'sem acesso'
-
+    
+    uid=get_active_token().user_id
     questions = Question.query.filter_by(lesson_id=lesson_id).all()
+    qids = [q[0] for q in Answer.query.filter_by(user_id=uid).with_entities(Answer.question_id).all()]
+    print("a", qids)
 
-    return render_template("lesson/lesson_student.html", lesson=lesson, questions=questions)
+    answers = [ {str(qid): Answer.query.filter_by(user_id=uid, question_id=qid).first().answer} for qid in qids]
+    print("b", answers)
+    return render_template("lesson/lesson_student.html", lesson=lesson, questions=questions, qids=qids, answers=answers)
 
 @lesson.get("/create")
 def lesson_get_create():

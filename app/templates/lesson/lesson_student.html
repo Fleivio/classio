@@ -38,11 +38,20 @@
                     <div id={{ "collapse" ~ question.question_id }} class="accordion-collapse collapse" data-bs-parent="#accordion">
                       <div class="accordion-body">
                         <form method="post" action={{ "/lesson/add_answers?lesson_id=" ~ lesson.lesson_id ~ "&question_id=" ~ question.question_id }}>
-                            {% if question.description %}
-                                <label class="mt-3" for={{"qid" ~ question.question_id}}>{{ question.description }}</label>
-                            {% endif %}
+                          {% if question.description %}
+                              <label class="mt-3" for={{"qid" ~ question.question_id}}>{{ question.description }}</label>
+                          {% endif %}
+
+                          {% if question.question_id in qids %}
+                            <br>
+                            <span>
+                              Pergunta respondida!
+                              {{ answers[question.question_id] }}
+                            </span>
+                          {% else %}
                               <textarea class="form-control mb-3" id={{ "qid" ~ question.question_id }} name="answer" rows="3"></textarea>
                             <button class="btn btn-primary" type="submit">Responder</button>
+                          {% endif %}
                         </form>
                       </div>
                     </div>
