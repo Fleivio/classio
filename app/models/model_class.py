@@ -13,6 +13,8 @@ class Class(db.Model):
     def usr_has_access_professor(id, token):
         if not token:
             return False
+        if not id:
+            return False
         cl = Class.query.filter_by(class_id=id).first()
         return token.user_id == cl.professor_id
     

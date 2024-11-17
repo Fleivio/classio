@@ -43,6 +43,18 @@ def class_get_join():
         return redirect('/')
     return render_template("class/class_join.html")
 
+@class_.get('/enrollments')
+def class_get_enrollments():
+    class_id = request.args.get('class_id')
+    token = get_active_token()
+    if not Class.usr_has_access_professor(class_id, token):
+        return redirect('/')
+    
+    enrollments = Enrollment.query.filter_by(class_id=class_id).all()
+    class_ = Class.query.filter_by(class_id=class_id).first()
+
+    return render_template("class/class_enrollments.html", class_data=class_, enrollments=enrollments)
+
 # POST
 
 @class_.post('/create')
@@ -94,6 +106,23 @@ def class_post_join():
     db.session.commit()
 
     return redirect('/class?class_id=' + str(id))
+
+@class_.post("/kickout")
+def class_post_kickout():
+    class_id = request.args.get('class_id')
+    user_id = request.args.get('user_id')
+
+    if not Class.usr_has_access_professor(class_id, get_active_token()):
+        return "Unauthorized", 401
+
+    enrollment = Enrollment.query.filter_by(class_id=class_id, user_id=user_id).first()
+    if not enrollment:
+        return redirect('/')
+    
+    db.session.delete(enrollment)
+    db.session.commit()
+
+    return redirect('/class/enrollments?class_id=' + class_id)
 
 # PUT
 
