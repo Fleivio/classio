@@ -158,7 +158,7 @@ def class_post_thread_create():
     
     thread_title = request.form.get('thread_title')
     thread_description = request.form.get('thread_desc')
-    date_created = datetime.now(timezone.utc)
+    date_created = datetime.now(timezone(timedelta(hours=-3)))
     user_id = token.user_id
 
     thread = Thread(class_id=class_id
@@ -186,7 +186,7 @@ def class_post_response():
         return redirect('/')
     
     response = request.form.get('response')
-    date_now = datetime.now(timezone.utc)
+    date_now = datetime.now(timezone(timedelta(hours=-3)))
     uid = token.user_id
 
 

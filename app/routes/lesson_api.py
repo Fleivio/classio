@@ -122,7 +122,7 @@ def lesson_post_question():
 
     title = request.form.get("question_title")
     question = request.form.get("question_description")
-    date_created = datetime.now(timezone.utc) 
+    date_created = datetime.now(timezone(timedelta(hours=-3))) 
 
     question = Question(lesson_id=lesson_id, title=title, description=question, date_created=date_created, is_multiple_choice=False)
     db.session.add(question)
@@ -147,7 +147,7 @@ def lesson_post_add_answers():
     
     answer = request.form.get("answer")
     uid = get_active_token().user_id
-    date_now = datetime.now(timezone.utc)
+    date_now = datetime.now(timezone(timedelta(hours=-3)))
     answer = Answer(answer=answer, 
                     date_created=date_now,
                     user_id=uid,

@@ -15,7 +15,7 @@ class Token(db.Model):
     @staticmethod
     def generate_token(user, validade_horas=1):
         token = secrets.token_urlsafe(64)
-        expires_at = datetime.now(timezone.utc) + timedelta(hours=validade_horas)
+        expires_at = datetime.now(timezone(timedelta(hours=-3))) + timedelta(hours=validade_horas)
         new_token = Token(user_id=user.user_id, token=token, expires_at=expires_at)
 
         db.session.add(new_token)
@@ -23,8 +23,8 @@ class Token(db.Model):
         return new_token
 
     def expired(self):
-        now = datetime.now(timezone.utc)
-        return self.expires_at.replace(tzinfo=timezone.utc) < now
+        now = datetime.now(timezone(timedelta(hours=-3)))
+        return self.expires_at.replace(tzinfo=timezone(timedelta(hours=-3))) < now
 
     def get_user_id(token):
         return Token.query.filter_by(token=token).first().user_id
