@@ -65,7 +65,15 @@ def lesson_professor_get():
 
 @lesson.get("/answers")
 def lesson_get_answers():
-    return ""
+    question_id = request.args.get("question_id")
+
+    # :|
+    question = Question.query.filter_by(question_id=question_id).first()
+    lesson = Lesson.query.filter_by(lesson_id=question.lesson_id).first()
+    class_ = Class.query.filter_by(class_id=lesson.class_id).first()
+    answers = Answer.query.filter_by(question_id=question_id).all()
+
+    return render_template("lesson/lesson_answers.html", class_=class_, lesson=lesson, answers=answers, question=question)
 
 # POST
 

@@ -36,7 +36,7 @@
                             <div id={{ "collapse" ~ question.question_id }} class="accordion-collapse collapse" data-bs-parent="#accordion">
                               <div class="accordion-body">
                                     <p>{{ question.description }}</p>
-                                    <a href="/lesson" class="btn btn-secondary">Ver Respostas</a>
+                                    <a href={{ "/lesson/answers?question_id=" ~ question.question_id }} class="btn btn-secondary">Ver Respostas</a>
                               </div>
                             </div>
                           </div>
