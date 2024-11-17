@@ -15,7 +15,7 @@ def class_get_class():
 
     class_ = Class.query.filter_by(class_id=class_id).first()
 
-    return render_template("class/class_student.jinja", class_data=class_.to_dict())
+    return render_template("class/class_student.html", class_data=class_.to_dict())
 
 @class_.get('/edit')
 def class_get_edit():
@@ -26,7 +26,7 @@ def class_get_edit():
 
     class_ = Class.query.filter_by(class_id=class_id).first()
 
-    return render_template("class/class_professor.jinja", class_data=class_.to_dict())
+    return render_template("class/class_professor.html", class_data=class_.to_dict())
 
 @class_.get('/create')
 def class_get_create():
@@ -34,14 +34,14 @@ def class_get_create():
     if not token:
         return redirect('/')
 
-    return render_template("class/class_create.jinja")
+    return render_template("class/class_create.html")
 
 @class_.get('/join')
 def class_get_join():
     token = get_active_token()
     if not token:
         return redirect('/')
-    return render_template("class/class_join.jinja")
+    return render_template("class/class_join.html")
 
 # POST
 
@@ -56,7 +56,7 @@ def class_post_create():
     class_description = request.form.get('class_description')
 
     if not class_name or not class_description:
-        return render_template("class/class_create.jinja")
+        return render_template("class/class_create.html")
 
     class_ = Class(class_name=class_name, class_description=class_description, professor_id=token.user_id)
     db.session.add(class_)
@@ -89,7 +89,7 @@ def class_post_join():
         flash('You are already enrolled in this class', 'error')
         return redirect('/class/join')
     
-    enrollment = Enrollment(student_id=token.user_id, class_id=id)
+    enrollment = Enrollment(user_id=token.user_id, class_id=id)
     db.session.add(enrollment)
     db.session.commit()
 

@@ -25,7 +25,9 @@ def lesson_get():
     if not Class.usr_has_access_student(class_.class_id, get_active_token()):
         return 'sem acesso'
 
-    return render_template("lesson/lesson_student.jinja", lesson=lesson)
+    questions = Question.query.filter_by(lesson_id=lesson_id).all()
+
+    return render_template("lesson/lesson_student.html", lesson=lesson, questions=questions)
 
 @lesson.get("/create")
 def lesson_get_create():
@@ -39,7 +41,7 @@ def lesson_get_create():
     if not class_:
         return redirect('/')
 
-    return render_template("lesson/lesson_create.jinja", class_data=class_.to_dict())
+    return render_template("lesson/lesson_create.html", class_data=class_.to_dict())
 
 @lesson.get('/edit')
 def lesson_professor_get():
@@ -54,14 +56,16 @@ def lesson_professor_get():
     if not class_:
         return redirect('/')
     
-    print(class_.class_id)
-    
     if not Class.usr_has_access_professor(class_.class_id, get_active_token()):
         return redirect('/')
 
-    # lesson.questions com as perguntas
+    questions = Question.query.filter_by(lesson_id=lesson_id).all()
 
-    return render_template("lesson/lesson_edit.jinja", lesson=lesson)
+    return render_template("lesson/lesson_edit.html", lesson=lesson, questions=questions)
+
+@lesson.get("/answers")
+def lesson_get_answers():
+    return ""
 
 # POST
 
@@ -104,10 +108,8 @@ def lesson_post_question():
         return redirect('/')
 
     title = request.form.get("question_title")
-    question = request.form.get("question_body")
+    question = request.form.get("question_description")
     date_created = datetime.now(timezone.utc) 
-
-    print(title, question, date_created)
 
     question = Question(lesson_id=lesson_id, title=title, description=question, date_created=date_created, is_multiple_choice=False)
     db.session.add(question)
@@ -118,6 +120,7 @@ def lesson_post_question():
 @lesson.post("/add_answers")
 def lesson_post_add_answers():
     lesson_id = request.args.get("lesson_id")
+    question_id = request.args.get("question_id")
     
     lesson = Lesson.query.filter_by(lesson_id=lesson_id).first()
 
@@ -129,19 +132,15 @@ def lesson_post_add_answers():
     if not Class.usr_has_access_student(class_, get_active_token()):
         return redirect('/')
     
-    for key, answer in request.form.to_dict().items():
-        if not answer:
-            continue
+    answer = request.form.get("answer")
+    uid = get_active_token().user_id
+    date_now = datetime.now(timezone.utc)
+    answer = Answer(answer=answer, 
+                    date_created=date_now,
+                    user_id=uid,
+                    question_id=question_id)
         
-        question_id = int(key[3:])
-        uid = get_active_token().user_id
-        date_now = datetime.now(timezone.utc)
-        answer = Answer(answer=answer, 
-                        date_created=date_now,
-                        student_id=uid,
-                        question_id=question_id)
-        
-        db.session.add(answer)
-        db.session.commit()
+    db.session.add(answer)
+    db.session.commit()
 
     return redirect(f"/lesson?lesson_id={lesson_id}")

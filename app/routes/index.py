@@ -19,21 +19,21 @@ def index_screen():
     if get_active_token():
         return redirect("/home")
     else:
-        return render_template("home/index.jinja")
+        return render_template("home/index.html")
 
 
 @index.get("/login")
 def login_get():
     if get_active_token():
         return redirect("/")
-    return render_template("home/login.jinja")
+    return render_template("home/login.html")
 
 
 @index.get("/signup")
 def signup_get():
     if get_active_token():
         return redirect("/")
-    return render_template("home/sign_up.jinja")
+    return render_template("home/sign_up.html")
 
 
 @index.get("/home")
@@ -45,7 +45,7 @@ def user_home():
 
     uid = token.user_id
 
-    student_enrollments = Enrollment.query.filter_by(student_id=uid).all()
+    student_enrollments = Enrollment.query.filter_by(user_id=uid).all()
 
     user_classes_student = map(lambda elem: elem.class_, student_enrollments)
     user_classes_professor = Class.query.filter_by(professor_id=uid).all()
@@ -65,4 +65,4 @@ def user_home():
         "username": user.username,
     }
 
-    return render_template("home/index_logged.jinja", user_data=user_data)
+    return render_template("home/index_logged.html", user_data=user_data)

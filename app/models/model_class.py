@@ -20,7 +20,7 @@ class Class(db.Model):
         if not token:
             return False
         cl = Class.query.filter_by(class_id=id).first()
-        return token.user_id in map(lambda x: x.student_id, cl.enrollments)
+        return token.user_id in map(lambda x: x.user_id, cl.enrollments)
     
     def to_dict(self):
         return {

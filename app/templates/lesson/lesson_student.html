@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <div class="row gx-5 gy-3">
+
+    {% include "sidebar.html" %}
+
+        <div class="col-md-9">
+
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb fs-3">
+                    <li class="breadcrumb-item">
+                        <a href={{ "/class?class_id=" ~ lesson.class_.class_id }}>{{ lesson.class_.class_name }}</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ lesson.title }}</li>
+                </ol>
+            </nav>
+
+            <p>{{ lesson.description }}</p>
+
+            <h4 class="mb-3">Perguntas do Professor</h4>
+            {% if questions %}
+            <ul class="list-group">
+                <div class="accordion" id="accordion">
+                {%for question in questions %}
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target={{ "#collapse" ~ question.question_id }} aria-expanded="false" aria-controls={{ "collapse" ~ question.question_id }}>
+                          {{ question.title }}
+                      </button>
+                    </h2>
+                    <div id={{ "collapse" ~ question.question_id }} class="accordion-collapse collapse" data-bs-parent="#accordion">
+                      <div class="accordion-body">
+                        <form method="post" action={{ "/lesson/add_answers?lesson_id=" ~ lesson.lesson_id ~ "&question_id=" ~ question.question_id }}>
+                            {% if question.description %}
+                                <label class="mt-3" for={{"qid" ~ question.question_id}}>{{ question.description }}</label>
+                            {% endif %}
+                              <textarea class="form-control mb-3" id={{ "qid" ~ question.question_id }} name="answer" rows="3"></textarea>
+                            <button class="btn btn-primary" type="submit">Responder</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                {%endfor%}
+                </div>
+            </ul>
+            {% else %}
+                <p>O seu professor ainda não perguntou nada à turma.</p>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

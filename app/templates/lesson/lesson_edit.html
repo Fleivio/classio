@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="row gx-5 gy-3">
+            {% include "sidebar.html" %}
+            
+            <div class="col-md-9">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb fs-3">
+                        <li class="breadcrumb-item">
+                            <a href={{ "/class/edit?class_id=" ~ lesson.class_.class_id }}>{{ lesson.class_.class_name }}</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ lesson.title }}</li>
+                    </ol>
+                </nav>
+
+                <p>{{ lesson.description }}</p>
+
+                <h4 class="mt-4">Minhas Perguntas</h4>
+                {% if questions %}
+
+                    <ul class="list-group">
+                        <div class="accordion" id="accordion">
+                        {%for question in questions %}
+                          <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target={{ "#collapse" ~ question.question_id }} aria-expanded="false" aria-controls={{ "collapse" ~ question.question_id }}>
+                                  {{ question.title }}
+                              </button>
+                            </h2>
+                            <div id={{ "collapse" ~ question.question_id }} class="accordion-collapse collapse" data-bs-parent="#accordion">
+                              <div class="accordion-body">
+                                    <p>{{ question.description }}</p>
+                                    <a href="/lesson" class="btn btn-secondary">Ver Respostas</a>
+                              </div>
+                            </div>
+                          </div>
+                        {%endfor%}
+                        </div>
+                    </ul>
+                    {% else %}
+                        <p>Você ainda não criou nenhuma pergunta.</p>
+                    {% endif %}
+
+
+                <div class="container mt-4 gx-0">
+                    <p>
+                        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample">
+                            Perguntar 
+                        </button>
+                    </p>
+                      <div class="collapse" id="collapseWidthExample">
+                      <form action={{ "/lesson/add_question?lesson_id=" ~ lesson.lesson_id }} id="classJoinForm" method="post">
+                          <label class="form-label" for="question_title">Título</label>
+                          <input class="form-control" type="text" id="question_title" name="question_title" required>
+                          
+                          <label class="form-label" for="question_description">Descripção</label>
+                          <div class="col-10 col-md-6 mb-4">
+                              <textarea class="form-control" id="question_description" name="question_description" rows="5" required></textarea>
+                          </div>
+                          <button class="btn btn-secondary" type="submit">Submeter</button>
+                      </form>
+                      </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

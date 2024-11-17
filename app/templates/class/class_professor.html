@@ -1,4 +1,4 @@
-{% extends "base.jinja" %}
+{% extends "base.html" %}
 
 {% block head %}
     {{ super() }}
@@ -7,11 +7,15 @@
 {% block content %}
     <div class="container mt-5">
         <div class="row gx-5 gy-3">
-            {% include "sidebar.jinja" %}
+            {% include "sidebar.html" %}
             <div class="col-md-9">
-                <h2>{{ class_data.class_name + " - Professor"}}</h2>
-                <p class="lead">{{ class_data.class_description }}</p>
-                <p class="lead">Código: {{ class_data.class_id }}</p>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb fs-3">
+                        <li class="breadcrumb-item active" aria-current="page">{{ class_data.class_name }}</li>
+                    </ol>
+                </nav>
+
+                <p>{{ class_data.class_description }}</p>
 
                 <div class="container">
                     <div class="row">
