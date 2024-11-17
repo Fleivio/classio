@@ -16,7 +16,7 @@ def class_get_class():
 
     class_ = Class.query.filter_by(class_id=class_id).first()
 
-    return render_template("class/class_student.html", class_data=class_.to_dict())
+    return render_template("class/class_student.html", class_data=class_.to_dict(), class_=class_)
 
 @class_.get('/edit')
 def class_get_edit():
@@ -174,3 +174,27 @@ def class_post_thread_create():
 
 
     return redirect('/class?class_id=' + class_id)
+
+@class_.post('/thread/response')
+def class_post_response():
+    class_id = request.args.get('class_id')
+    token = get_active_token()
+    thread_id = request.args.get('thread_id')
+    print("tid" + thread_id)
+
+    if not Class.usr_has_access_student(class_id, token) and not Class.usr_has_access_professor(class_id, token):
+        return redirect('/')
+    
+    response = request.form.get('response')
+    date_now = datetime.now(timezone.utc)
+    uid = token.user_id
+
+
+    response = Thread_Response(thread_id=thread_id
+                    , response=response
+                    , date_created=date_now
+                    , user_id=uid)
+
+    db.session.add(response)
+    db.session.commit()
+    return redirect('/')

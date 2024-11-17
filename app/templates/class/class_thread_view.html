@@ -28,6 +28,15 @@
             {% for response in thread.responses %}
               <p>{{response.response}}</p>
             {% endfor %}
+
+            <hr>
+
+            <form method="post" action={{"/class/thread/response?class_id=" ~ class_.class_id ~"&thread_id=" ~ thread.thread_id}}>
+                <label for="response">Responda aqui:</label>
+                <textarea id="response" name="response">
+                </textarea>
+                <button type="submit">Responder</button>
+            </form>
         
         </div>
     </div>
