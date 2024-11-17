@@ -38,24 +38,3 @@ class Answer(db.Model):
             "user_id": self.user_id,
             "question_id": self.question_id,
         }
-
-
-# class Option(db.Model):
-#     __tablename__ = 'option'
-
-#     option_id = db.Column(db.Integer, primary_key=True)
-#     option = db.Column(db.String(128), nullable=False)
-#     question_id = db.Column(db.Integer, db.ForeignKey('question.question_id'), nullable=False)
-
-#     question = db.relationship('Question', backref='options')
-
-
-# class OptionAnswer(db.Model):
-#     __tablename__ = 'option_answer'
-
-#     option_answer_id = db.Column(db.Integer, primary_key=True)
-#     answer_id = db.Column(db.Integer, db.ForeignKey('answer.answer_id'), nullable=False)
-#     option_id = db.Column(db.Integer, db.ForeignKey('option.option_id'), nullable=False)
-
-#     answer = db.relationship('Answer', backref='option_answers')
-#     option = db.relationship('Option', backref='option_answers')

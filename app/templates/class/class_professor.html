@@ -25,7 +25,6 @@
                         </div>
                         <div class="col gx-0 text-end">
                             <a href={{"/lesson/create?class_id=" + class_data.class_id}} class="btn btn-primary" role="button">Adicionar</a>
-                        
                             <a href={{"/class/enrollments?class_id=" + class_data.class_id}} class="btn btn-primary" role="button">Inscrições</a>
                         </div>
                     </div>
@@ -35,7 +34,28 @@
                         <a class="list-group-item list-group-item-active" 
                            href={{ "/lesson/edit?lesson_id=" + lesson.lesson_id }}
                             >
-                           Aula {{lesson.lesson_title}}
+                           Aula - {{lesson.lesson_title}}
+                        </a>
+                    {% endfor %}
+                </ul>
+
+                <hr>
+                <div class="container">
+                    <div class="row">
+                        <div class="col gx-0">
+                            <h3>Fórum</h3>
+                        </div>
+                        <div class="col gx-0 text-end">
+                            <a href={{"/class/thread/create?class_id=" ~ class_.class_id}} class="btn btn-primary" role="button">Nova Thread</a>
+                        </div>
+                    </div>
+                </div>
+                <ul class="list-group">
+                    {% for thread in class_.threads %}
+                        <a class="list-group-item list-group-item-active" 
+                           href={{ "/class/thread?thread_id=" ~ thread.thread_id }}
+                            >
+                           Thread - {{thread.title}}
                         </a>
                     {% endfor %}
                 </ul>

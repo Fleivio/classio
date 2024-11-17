@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <div class="row gx-5 gy-3">
+
+    {% include "sidebar.html" %}
+
+        <div class="col-md-9">
+
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb fs-3">
+                    <li class="breadcrumb-item">
+                        <a href={{ "/class?class_id=" ~ class_.class_id }}>{{ thread.class_.class_name }}</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ thread.title }}</li>
+                </ol>
+            </nav>
+
+            <p>{{ thread.description }}</p>
+            <hr>
+
+            {% for response in thread.responses %}
+              <p>{{response.response}}</p>
+            {% endfor %}
+        
+        </div>
+    </div>
+{% endblock %}

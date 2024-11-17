@@ -1,6 +1,7 @@
-from app.models import Class, db, Enrollment
+from app.models import Class, db, Enrollment, Thread, Thread_Response
 from flask import *
 from .index import get_active_token
+from datetime import datetime, timedelta, timezone
 
 class_ = Blueprint('class_', __name__)
 
@@ -26,7 +27,7 @@ def class_get_edit():
 
     class_ = Class.query.filter_by(class_id=class_id).first()
 
-    return render_template("class/class_professor.html", class_data=class_.to_dict())
+    return render_template("class/class_professor.html", class_data=class_.to_dict(), class_=class_)
 
 @class_.get('/create')
 def class_get_create():
@@ -54,6 +55,29 @@ def class_get_enrollments():
     class_ = Class.query.filter_by(class_id=class_id).first()
 
     return render_template("class/class_enrollments.html", class_data=class_, enrollments=enrollments)
+
+@class_.get('/thread/create')
+def class_get_thread_create():
+    class_id = request.args.get('class_id')
+    token = get_active_token()
+    if not Class.usr_has_access_student(class_id, token) and not Class.usr_has_access_professor(class_id, token):
+        return redirect('/')
+    
+    class_ = Class.query.filter_by(class_id=class_id).first()
+
+    return render_template("class/class_thread_create.html", class_=class_)
+
+@class_.get('/thread')
+def class_get_thread():
+    thread_id = request.args.get('thread_id')
+    token = get_active_token()
+    thread = Thread.query.filter_by(thread_id=thread_id).first()
+    class_ = Class.query.filter_by(class_id=thread.class_id).first()
+
+    if not Class.usr_has_access_student(class_.class_id, token) and not Class.usr_has_access_professor(class_.class_id, token):
+        return redirect('/')
+
+    return render_template("class/class_thread_view.html", thread=thread, class_=class_)
 
 # POST
 
@@ -124,24 +148,29 @@ def class_post_kickout():
 
     return redirect('/class/enrollments?class_id=' + class_id)
 
-# PUT
+@class_.post('/thread/create')
+def class_post_thread_create():
+    class_id = request.args.get('class_id')
+    token = get_active_token()
 
-# @class_.put('/edit')
-# def class_put_edit():
-#     class_id = request.args.get('class_id')
-
-#     if not Class.usr_has_access_professor(class_id, get_active_token()):
-#         return redirect('/')
-
-#     class_name = request.form.get('class_name')
-#     class_description = request.form.get('class_description')
-
-#     if not class_name or not class_description:
-#         return redirect('/class/edit?class_id=' + class_id)
+    if not Class.usr_has_access_student(class_id, token) and not Class.usr_has_access_professor(class_id, token):
+        return 'no acess'
     
-#     class_ = Class.query.filter_by(class_id=class_id).first()
-#     class_.class_name = class_name
-#     class_.class_description = class_description
-#     db.session.commit()
+    thread_title = request.form.get('thread_title')
+    thread_description = request.form.get('thread_desc')
+    date_created = datetime.now(timezone.utc)
+    user_id = token.user_id
 
-#     return redirect('/class/edit?class_id=' + class_id)
+    thread = Thread(class_id=class_id
+                    , title=thread_title
+                    , description=thread_description
+                    , date_created=date_created
+                    , user_id=user_id)
+
+    print(thread)
+
+    db.session.add(thread)
+    db.session.commit()
+
+
+    return redirect('/class?class_id=' + class_id)
