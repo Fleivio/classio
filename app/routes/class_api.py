@@ -177,10 +177,12 @@ def class_get_thread():
     thread = Thread.query.filter_by(thread_id=thread_id).first()
     class_ = Class.query.filter_by(class_id=thread.class_id).first()
 
-    if not Class.usr_has_access_student(class_.class_id, token) and not Class.usr_has_access_professor(class_.class_id, token):
-        return redirect('/')
-
-    return render_template("class/class_thread_view.html", thread=thread, class_=class_)
+    if Class.usr_has_access_student(class_.class_id, token):
+        return render_template("class/class_thread_view.html", thread=thread, class_=class_)
+    if Class.usr_has_access_professor(class_.class_id, token):
+        return render_template("class/class_thread_view_professor.html", thread=thread, class_=class_)
+        
+    return redirect('/')
 
 @class_.post('/thread/create')
 def class_post_thread_create():

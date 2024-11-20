@@ -24,6 +24,7 @@
 
             <ul class="list-group">
                 <li class="mb-1 bg-secondary-subtle list-group-item">
+                    <p>{{ thread.user.username }}</p>
                     <p>{{ thread.description }}</p>
                     <div class="text-end text-primary-emphasis">{{thread.date_created.replace(microsecond=0)}}</div>
                 </li>
@@ -35,6 +36,7 @@
             <ul class="list-group">
             {% for response in thread.responses %}
             <li class="mb-1 bg-secondary-subtle list-group-item">
+              <p>{{response.user.username}}</p>
               <p>{{response.response}}</p>
               <div class="text-end text-primary-emphasis">{{response.date_created.replace(microsecond=0)}}</div>
             </li>
