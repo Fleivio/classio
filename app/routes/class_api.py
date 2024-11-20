@@ -231,7 +231,7 @@ def class_post_response():
 
     db.session.add(response)
     db.session.commit()
-    return redirect('/')
+    return redirect('/class/thread?thread_id=' + thread_id)
 
 @class_.post('/thread/delete')
 def class_post_thread_delete():

@@ -23,21 +23,25 @@
             </nav>
 
             <p>{{ thread.description }}</p>
-            <hr>
 
+            <ul class="list-group">
             {% for response in thread.responses %}
+            <li class="mb-1 bg-secondary-subtle list-group-item">
               <p>{{response.response}}</p>
-              <span>{{response.date_created}}</span>
+              <div class="text-end text-primary-emphasis">{{response.date_created.replace(microsecond=0)}}</div>
+            </li>
             {% endfor %}
+            </ul>
 
-            <hr>
-
-            <form method="post" action={{"/class/thread/response?class_id=" ~ class_.class_id ~"&thread_id=" ~ thread.thread_id}}>
-                <label for="response">Responda aqui:</label>
-                <textarea required id="response" name="response">
-                </textarea>
-                <button type="submit">Responder</button>
-            </form>
+            <div class="card mt-3">
+                <div class="card-body">
+                    <form method="post" action={{"/class/thread/response?class_id=" ~ class_.class_id ~"&thread_id=" ~ thread.thread_id}}>
+                        <label class="mb-2 form-label" for="response">Responder</label>
+                        <textarea class="mb-3 form-control" required id="response" name="response"></textarea>
+                        <button class="btn btn-primary" type="submit">Responder</button>
+                    </form>
+                </div>
+            </div>
         
         </div>
     </div>
