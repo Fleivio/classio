@@ -14,7 +14,7 @@ class Question(db.Model):
     lesson_id = db.Column(db.Integer, db.ForeignKey("lesson.lesson_id"), nullable=False)
 
     lesson = db.relationship("Lesson", backref="questions")
-
+    # qs_answers = db.relationship("Answer", back_populates="question", cascade="all, delete-orphan")
 
 class Answer(db.Model):
     __tablename__ = "answer"

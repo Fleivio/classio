@@ -11,23 +11,15 @@ class_ = Blueprint('class_', __name__)
 def class_get_class():
     class_id = request.args.get('class_id')
 
-    if not Class.usr_has_access_student(class_id, get_active_token()):
-        return redirect('/')
-
     class_ = Class.query.filter_by(class_id=class_id).first()
 
-    return render_template("class/class_student.html", class_data=class_.to_dict(), class_=class_)
+    if Class.usr_has_access_student(class_id, get_active_token()):
+        return render_template("class/class_student.html", class_data=class_.to_dict(), class_=class_)
 
-@class_.get('/edit')
-def class_get_edit():
-    class_id = request.args.get('class_id')
+    if Class.usr_has_access_professor(class_id, get_active_token()):
+        return render_template("class/class_professor.html", class_data=class_.to_dict(), class_=class_)
 
-    if not Class.usr_has_access_professor(class_id, get_active_token()):
-        return redirect('/')
-
-    class_ = Class.query.filter_by(class_id=class_id).first()
-
-    return render_template("class/class_professor.html", class_data=class_.to_dict(), class_=class_)
+    return redirect('/')
 
 @class_.get('/create')
 def class_get_create():
@@ -56,29 +48,6 @@ def class_get_enrollments():
 
     return render_template("class/class_enrollments.html", class_data=class_, enrollments=enrollments)
 
-@class_.get('/thread/create')
-def class_get_thread_create():
-    class_id = request.args.get('class_id')
-    token = get_active_token()
-    if not Class.usr_has_access_student(class_id, token) and not Class.usr_has_access_professor(class_id, token):
-        return redirect('/')
-    
-    class_ = Class.query.filter_by(class_id=class_id).first()
-
-    return render_template("class/class_thread_create.html", class_=class_)
-
-@class_.get('/thread')
-def class_get_thread():
-    thread_id = request.args.get('thread_id')
-    token = get_active_token()
-    thread = Thread.query.filter_by(thread_id=thread_id).first()
-    class_ = Class.query.filter_by(class_id=thread.class_id).first()
-
-    if not Class.usr_has_access_student(class_.class_id, token) and not Class.usr_has_access_professor(class_.class_id, token):
-        return redirect('/')
-
-    return render_template("class/class_thread_view.html", thread=thread, class_=class_)
-
 # POST
 
 @class_.post('/create')
@@ -98,7 +67,25 @@ def class_post_create():
     db.session.add(class_)
     db.session.commit()
 
-    return redirect('/class/edit?class_id=' + str(class_.class_id))
+    return redirect('/class?class_id=' + str(class_.class_id))
+
+@class_.route('/delete', methods=['POST'])
+def class_post_delete():
+    token = get_active_token()
+    class_id = request.form.get('class_id')
+    
+    if not Class.usr_has_access_professor(request.form.get('class_id'), token):
+        return redirect('/')
+
+    class_ = Class.query.filter_by(class_id=class_id, professor_id=token.user_id).first()
+    if not class_:
+        return "Class not found or permission denied", 404
+
+    db.session.delete(class_)
+    db.session.commit()
+
+    return redirect('/class')
+
 
 @class_.post('/join')
 def class_post_join():
@@ -147,6 +134,31 @@ def class_post_kickout():
     db.session.commit()
 
     return redirect('/class/enrollments?class_id=' + class_id)
+
+# THREADS
+
+@class_.get('/thread/create')
+def class_get_thread_create():
+    class_id = request.args.get('class_id')
+    token = get_active_token()
+    if not Class.usr_has_access_student(class_id, token) and not Class.usr_has_access_professor(class_id, token):
+        return redirect('/')
+    
+    class_ = Class.query.filter_by(class_id=class_id).first()
+
+    return render_template("class/class_thread_create.html", class_=class_)
+
+@class_.get('/thread')
+def class_get_thread():
+    thread_id = request.args.get('thread_id')
+    token = get_active_token()
+    thread = Thread.query.filter_by(thread_id=thread_id).first()
+    class_ = Class.query.filter_by(class_id=thread.class_id).first()
+
+    if not Class.usr_has_access_student(class_.class_id, token) and not Class.usr_has_access_professor(class_.class_id, token):
+        return redirect('/')
+
+    return render_template("class/class_thread_view.html", thread=thread, class_=class_)
 
 @class_.post('/thread/create')
 def class_post_thread_create():

@@ -13,10 +13,10 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb fs-3">
                         <li class="breadcrumb-item">
-                            <a href={{ "/class/edit?class_id=" ~ class_.class_id }}>{{ class_.class_name }}</a>
+                            <a href={{ "/class?class_id=" ~ class_.class_id }}>{{ class_.class_name }}</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            <a href={{ "/lesson/edit?lesson_id=" ~ lesson.lesson_id }}>{{ lesson.title }}</a>
+                            <a href={{ "/lesson?lesson_id=" ~ lesson.lesson_id }}>{{ lesson.title }}</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">Respostas</li>
                     </ol>

@@ -10,6 +10,10 @@ class Class(db.Model):
 
     professor = db.relationship('User', backref=db.backref('classes', lazy=True))
 
+    # cl_lessons = db.relationship('Lesson', back_populates='class_', cascade="all, delete-orphan")
+    # cl_enrollments = db.relationship('Enrollment', back_populates='class_', cascade="all, delete-orphan")
+    # cl_threads = db.relationship('Thread', back_populates='class_', cascade="all, delete-orphan")
+
     def usr_has_access_professor(id, token):
         if not token:
             return False
