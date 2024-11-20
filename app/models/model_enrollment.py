@@ -7,4 +7,5 @@ class Enrollment(db.Model):
     class_id = db.Column(db.Integer, db.ForeignKey('class.class_id'), primary_key=True)
 
     student = db.relationship('User', backref='enrollments', foreign_keys=[user_id])
-    class_ = db.relationship('Class', backref='enrollments', foreign_keys=[class_id])
+
+    class_ = db.relationship('Class', backref=db.backref('enrollments', cascade="all, delete-orphan"), foreign_keys=[class_id])

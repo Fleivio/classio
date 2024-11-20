@@ -13,8 +13,10 @@ class Question(db.Model):
 
     lesson_id = db.Column(db.Integer, db.ForeignKey("lesson.lesson_id"), nullable=False)
 
-    lesson = db.relationship("Lesson", backref="questions")
-    # qs_answers = db.relationship("Answer", back_populates="question", cascade="all, delete-orphan")
+    lesson = db.relationship("Lesson", backref=db.backref('questions', cascade="all, delete-orphan"), foreign_keys=[lesson_id])
+
+    qs_answers = db.relationship("Answer", cascade="all, delete-orphan")
+
 
 class Answer(db.Model):
     __tablename__ = "answer"
@@ -27,8 +29,9 @@ class Answer(db.Model):
         db.Integer, db.ForeignKey("question.question_id"), nullable=False
     )
 
-    question = db.relationship("Question", backref="answers")
+    question = db.relationship("Question", backref=db.backref("answers", cascade="all, delete-orphan"), foreign_keys=[question_id])
     student = db.relationship("User", backref="answers")
+
 
     def to_dict(self):
         return {

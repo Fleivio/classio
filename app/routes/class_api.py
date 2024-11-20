@@ -69,23 +69,44 @@ def class_post_create():
 
     return redirect('/class?class_id=' + str(class_.class_id))
 
-@class_.route('/delete', methods=['POST'])
+@class_.post('/delete')
 def class_post_delete():
     token = get_active_token()
-    class_id = request.form.get('class_id')
+    class_id = request.args.get('class_id')
     
     if not Class.usr_has_access_professor(request.form.get('class_id'), token):
         return redirect('/')
 
-    class_ = Class.query.filter_by(class_id=class_id, professor_id=token.user_id).first()
+    class_ = Class.query.filter_by(class_id=class_id).first()
     if not class_:
         return "Class not found or permission denied", 404
 
     db.session.delete(class_)
     db.session.commit()
 
-    return redirect('/class')
+    return redirect('/')
 
+@class_.post('/edit')
+def class_post_edit():
+    token = get_active_token()
+    class_id = request.args.get('class_id')
+    
+    if not Class.usr_has_access_professor(class_id, token):
+        return redirect('/')
+    
+    class_ = Class.query.filter_by(class_id=class_id).first()
+    if not class_:
+        return "Class not found or permission denied", 404
+
+    new_name = request.form.get('class_name')
+    if new_name:
+        class_.class_name = new_name
+
+    new_description = request.form.get('class_description')
+    if new_description:
+        class_.class_description = new_description
+
+    db.session.commit()
 
 @class_.post('/join')
 def class_post_join():
