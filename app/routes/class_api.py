@@ -144,7 +144,8 @@ def class_post_kickout():
     class_id = request.args.get('class_id')
     user_id = request.args.get('user_id')
 
-    if not Class.usr_has_access_professor(class_id, get_active_token()):
+    token = get_active_token()
+    if not (Class.usr_has_access_professor(class_id, token) or token.user_id == user_id):
         return "Unauthorized", 401
 
     enrollment = Enrollment.query.filter_by(class_id=class_id, user_id=user_id).first()
@@ -229,5 +230,65 @@ def class_post_response():
                     , user_id=uid)
 
     db.session.add(response)
+    db.session.commit()
+    return redirect('/')
+
+@class_.post('/thread/delete')
+def class_post_thread_delete():
+    token = get_active_token()
+    thread_id = request.args.get('thread_id')
+    thread = Thread.query.filter_by(thread_id=thread_id).first()
+
+    if not (Class.usr_has_access_professor(thread.class_id, token) or thread.user_id == token.user_id):
+        return redirect('/')
+    
+    db.session.delete(thread)
+    db.session.commit()
+    return redirect('/')
+
+@class_.post('/thread/edit')
+def class_post_thread_edit():
+    token = get_active_token()
+    thread_id = request.args.get('thread_id')
+   
+    thread = Thread.query.filter_by(thread_id=thread_id, user_id=token.user_id).first()
+    if not thread:
+        return "Thread not found or permission denied", 404
+
+    new_title = request.form.get('thread_title')
+    if new_title:
+        thread.title = new_title
+
+    new_description = request.form.get('thread_description')
+    if new_description:
+        thread.description = new_description
+
+    db.session.commit()
+    return redirect('/')
+
+@class_.post('/thread/response/edit')
+def class_post_response_edit():
+    token = get_active_token()
+    response_id = request.args.get('response_id')
+    response = Thread_Response.query.filter_by(response_id=response_id).first()
+
+    if not (response.user_id == token.user_id):
+        return redirect('/')
+    
+    new_response = request.form.get('response')
+    response.response = new_response
+    db.session.commit()
+    return redirect('/')
+
+@class_.post('/thread/response/delete')
+def class_post_response_delete():
+    token = get_active_token()
+    response_id = request.args.get('response_id')
+    response = Thread_Response.query.filter_by(response_id=response_id).first()
+
+    if not (Class.usr_has_access_professor(response.thread.class_id, token) or response.user_id == token.user_id):
+        return redirect('/')
+    
+    db.session.delete(response)
     db.session.commit()
     return redirect('/')
