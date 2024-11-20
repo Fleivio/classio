@@ -11,30 +11,25 @@
             <div class="col-md-9">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb fs-3">
-                        <li class="breadcrumb-item active" aria-current="page">{{ class_data.class_name }}</li>
+                        <li class="breadcrumb-item" aria-current="page">
+                            <a href={{ "/class?class_id=" ~ class_data.class_id }}>{{ class_data.class_name }}</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Inscrições</li>
                     </ol>
                 </nav>
 
-                <p>{{ class_data.class_description }}</p>
-
-                <div class="container">
-                    <div class="row">
-                        <div class="col gx-0">
-                            <h3>Inscrições</h3>
+                <ul class="list-group">
+                  {% for enrollment in enrollments %}
+                      <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">{{ enrollment.student.username }}</div>
+                          {{ enrollment.student.email }}
                         </div>
-                        
-                    </div>
-                </div>
-                
-                <ul>
-                  {%for enrollment in enrollments%}
-                    <li> {{enrollment.student.username}}</li>
-                    <form action={{"/class/kickout?user_id=" ~ enrollment.student.user_id ~ "&class_id=" ~ class_data.class_id}} method="POST" style="margin: 0;">
-                      <button type="submit" 
-                              class="btn btn-link list-group-item-action" 
-                              style="padding: 0; text-decoration: none;">Expulsar</button>
-                    </form>
-                  {%endfor%}
+                        <form action={{"/class/kickout?user_id=" ~ enrollment.student.user_id ~ "&class_id=" ~ class_data.class_id}} method="POST" style="margin: 0;">
+                          <button type="submit" class="btn btn-danger">Expulsar</button>
+                        </form>
+                      </li>
+                  {% endfor %}
                 </ul>
             </div>
         </div>
