@@ -63,6 +63,48 @@
             {% else %}
                 <p>O seu professor ainda não perguntou nada à turma.</p>
             {% endif %}
+
+            <hr>
+
+            <h4 class="mb-3">Avaliação da Aula</h4>
+            {% if questions %}
+            <ul class="list-group">
+                <div class="accordion" id="accordion">
+                {% for question in questions %}
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target={{ "#collapse" ~ question.question_id }} aria-expanded="false" aria-controls={{ "collapse" ~ question.question_id }}>
+                          {{ question.title }}
+                      </button>
+                    </h2>
+                    <div id={{ "collapse" ~ question.question_id }} class="accordion-collapse collapse" data-bs-parent="#accordion">
+                      <div class="accordion-body">
+                        <form method="post" action={{ "/lesson/add_answers?lesson_id=" ~ lesson.lesson_id ~ "&question_id=" ~ question.question_id }}>
+                          {% if question.description %}
+                              <label class="mt-3" for={{"qid" ~ question.question_id}}>{{ question.description }}</label>
+                          {% endif %}
+
+                          {% if question.question_id in answers.keys() %}
+                            <div class="card bg-success-subtle mt-3">
+                                <div class="card-body">
+                                    <p class="fs-5 text-success">Pergunta respondida!</p>
+                                        {{ answers[question.question_id] }}
+                                </div>
+                            </div>
+                          {% else %}
+                                <textarea class="form-control mb-3" id={{ "qid" ~ question.question_id }} name="answer" rows="3"></textarea>
+                                <button class="btn btn-primary" type="submit">Responder</button>
+                          {% endif %}
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                {%endfor%}
+                </div>
+            </ul>
+            {% else %}
+                <p>O seu professor ainda não perguntou nada à turma.</p>
+            {% endif %}
             </div>
         </div>
     </div>

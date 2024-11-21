@@ -59,6 +59,30 @@
                         </a>
                     {% endfor %}
                 </ul>
+
+
+                <div class="mt-3 mb-2 container">
+                    <div class="row">
+                        <div class="col gx-0">
+                            <h3>Estatísticas</h3>
+                        </div>
+                    </div>
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <form method="post" action={{"/class/st/create?class_id=" ~ class_.class_id}}>
+                                <label class="mb-2 form-label" for="st_title">Faça uma pesquisa</label>
+                                <textarea class="mb-3 form-control" required id="st_title" name="st_title"></textarea>
+                                <button class="btn btn-primary" type="submit">Pronto</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <ul class="list-group">
+                    {% for st_quest in class_.stat_questions %}                        
+                        <p>{{st_quest.title}}</p>
+                    {% endfor %}
+                </ul>
             </div>
         </div>
     </div>

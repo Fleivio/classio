@@ -1,4 +1,4 @@
-from app.models import Class, Lesson, db, Question, Answer
+from app.models import Class, Lesson, db, Question, Answer, StAnswer, StatQuestion
 from flask import request, render_template, redirect, Blueprint
 from .index import get_active_token
 from datetime import datetime, timedelta, timezone
@@ -42,6 +42,7 @@ def lesson_get():
             lesson=lesson,
             questions=questions,
             answers=answers_dict,
+            st_questions=class_.cl_stat_questions
         )
 
     if Class.usr_has_access_professor(class_.class_id, get_active_token()):

@@ -1,4 +1,4 @@
-from app.models import Class, db, Enrollment, Thread, Thread_Response
+from app.models import Class, db, Enrollment, Thread, Thread_Response, StatQuestion, StAnswer
 from flask import *
 from .index import get_active_token
 from datetime import datetime, timedelta, timezone
@@ -156,6 +156,26 @@ def class_post_kickout():
     db.session.commit()
 
     return redirect('/class/enrollments?class_id=' + class_id)
+
+# ST Questions
+
+@class_.post("st/create")
+def class_post_create_st():
+    class_id = request.args.get('class_id')
+    token = get_active_token()
+
+    if not Class.usr_has_access_professor(class_id, token):
+        return ('no acc')
+    
+    title = request.form.get('st_title')
+    if not title:
+        return ('no tit')
+
+    st = StatQuestion(class_id=class_id, title=title)
+    db.session.add(st)
+    db.session.commit()
+
+    return redirect('/class?class_id=' + class_id)
 
 # THREADS
 
