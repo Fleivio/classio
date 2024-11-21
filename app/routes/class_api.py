@@ -183,7 +183,7 @@ def class_post_response_st():
     question_id = request.args.get('question_id')
     lesson_id = request.args.get('lesson_id')
 
-    question = StatQuestion.query.filter(st_question_id=question_id).first()
+    question = StatQuestion.query.filter_by(st_question_id=question_id).first()
     class_id = question.class_id
 
     token = get_active_token()
@@ -193,7 +193,10 @@ def class_post_response_st():
     
     answer = request.form.get("rank")
 
-    answerObj = StAnswer(answer = answer, user_id=get_active_token().user_id, question_id=question_id, lesson_id=lesson_id )
+    answerObj = StAnswer(answer = answer,
+                        user_id=get_active_token().user_id,
+                        question_id=question_id,
+                        lesson_id=lesson_id )
     db.session.add(answerObj)
     db.session.commit()
 
