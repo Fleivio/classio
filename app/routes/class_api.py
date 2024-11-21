@@ -177,6 +177,30 @@ def class_post_create_st():
 
     return redirect('/class?class_id=' + class_id)
 
+
+@class_.post("/st/response")
+def class_post_response_st():
+    question_id = request.args.get('question_id')
+    lesson_id = request.args.get('lesson_id')
+
+    question = StatQuestion.query.filter(st_question_id=question_id).first()
+    class_id = question.class_id
+
+    token = get_active_token()
+
+    if not Class.usr_has_access_student(class_id, token):
+        return "no acc"
+    
+    answer = request.form.get("rank")
+
+    answerObj = StAnswer(answer = answer, user_id=get_active_token().user_id, question_id=question_id, lesson_id=lesson_id )
+    db.session.add(answerObj)
+    db.session.commit()
+
+    return redirect('/')
+    
+
+
 # THREADS
 
 @class_.get('/thread/create')
