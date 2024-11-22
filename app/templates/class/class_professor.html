@@ -80,8 +80,10 @@
                 
                 <ul class="list-group">
                     {% for st_quest in class_.stat_questions %}                        
-                        <p>{{st_quest.title}}</p>
-                        <span>{{st_quest.get_avg()}}</span>
+                        <h4>{{st_quest.title}} - {{st_quest.get_avg()}}</h4>
+                        {% for lesson in class_data.lessons%}
+                            <p>{{lesson.lesson_title}} - {{st_quest.get_avg_lesson(lesson.lesson_id)}}</p>
+                        {% endfor %}
                     {% endfor %}
                 </ul>
             </div>

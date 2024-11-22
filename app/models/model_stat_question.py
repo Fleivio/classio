@@ -12,7 +12,12 @@ class StatQuestion(db.Model):
     st_class = db.relationship('Class', backref=db.backref('stat_questions', cascade="all, delete-orphan"), foreign_keys=[class_id])
     
     def get_avg(self):
-        return sum([ans.answer for ans in self.st_ans]) / len(self.st_ans)
+        answers = [ans.answer for ans in self.st_ans]
+        return sum(answers) / len(answers) if answers else 0
+    
+    def get_avg_lesson(self, lesson_id):
+        answers = [ans.answer for ans in self.st_ans if ans.lesson_id == int(lesson_id)]
+        return sum(answers) / len(answers) if answers else 0
     
 class StAnswer(db.Model):
     __tablename__ = "stat_answer"
