@@ -69,29 +69,29 @@
             <h4 class="mb-3">Avaliação da Aula</h4>
             {% if st_questions %}
             <ul class="list-group">
-                <div class="accordion" id="accordion">
+                <form method="post" action={{"/class/st/response?lesson_id=" ~ lesson.lesson_id}}>
+
                 {% for st_question in st_questions %}
-                  <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target={{ "#collapse" ~ st_question.question_id }} aria-expanded="false" aria-controls={{ "collapse" ~ st_question.question_id }}>
-                          {{ st_question.title }}
-                      </button>
-                    </h2>
-
-                    <div id={{ "collapse" ~ st_question.question_id }} class="accordion-collapse collapse" data-bs-parent="#accordion">
-                      <div class="accordion-body">
-                        <form method="post" action={{ "/class/st/response?lesson_id=" ~ lesson.lesson_id ~ "&question_id=" ~ st_question.st_question_id }}>
-                      
-                            <label for="rank">Vote</label>
-                            <input type='range' id="rank" name="rank"></input>
-                            <button class="btn btn-primary" type="submit">Responder</button>
-                        </form>
-                      </div>
-                    </div>
-
+                  <div class="row mb-3">
+                  <label for={{"st_" ~ st_question.st_question_id}} class="col-sm-2 col-form-label col-form-label-sm">{{st_question.title}}</label>
+                  <div class="col-sm-10">
+                    <input  type="range" 
+                            min="1"
+                            max="5"
+                            value={{st_answers[st_question.st_question_id]}}
+                            class="form-control form-control-sm" 
+                            id={{"st_" ~ st_question.st_question_id}}
+                            name={{"st_" ~ st_question.st_question_id}}
+                            placeholder="col-form-label-sm">
+                  </div>
                   </div>
                 {%endfor%}
-                </div>
+
+                <button class="btn btn-primary">
+                  Enviar
+                </button>
+              </form>
+
             </ul>
             {% else %}
                 <p>O seu professor ainda não abriu pesquisas à turma.</p>

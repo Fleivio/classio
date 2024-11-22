@@ -7,7 +7,6 @@ lesson = Blueprint("lesson", __name__)
 
 # GET
 
-
 @lesson.get("")
 def lesson_get():
     lesson_id = request.args.get("lesson_id")
@@ -23,12 +22,6 @@ def lesson_get():
 
     questions = Question.query.filter_by(lesson_id=lesson_id).all()
 
-    # if Class.usr_has_access_student(class_.class_id, get_active_token()):
-    #     uid = get_active_token().user_id
-    #     qids = [q[0] for q in Answer.query.filter_by(user_id=uid).with_entities(Answer.question_id).all()]
-    #     answers = [ {str(qid): Answer.query.filter_by(user_id=uid, question_id=qid).first().answer} for qid in qids]
-    #     return render_template("lesson/lesson_student.html", lesson=lesson, questions=questions, qids=qids, answers=answers)
-
     if Class.usr_has_access_student(class_.class_id, get_active_token()):
         uid = get_active_token().user_id
         answers = Answer.query.filter_by(user_id=uid).all()
@@ -37,12 +30,26 @@ def lesson_get():
         for answer in answers:
             answers_dict[answer.question_id] = answer.answer
 
+        st_questions = class_.cl_stat_questions
+
+        st_answers_dict = {}
+        for st_question in st_questions:
+            st_answer = StAnswer.query.filter_by(
+                                                user_id = uid,
+                                                question_id = st_question.st_question_id,
+                                                lesson_id=lesson_id).first()
+            rank = 3 if not st_answer else st_answer.answer
+            st_answers_dict[st_question.st_question_id] = rank
+        
+        # print("a", st_answers_dict)
+
         return render_template(
             "lesson/lesson_student.html",
             lesson=lesson,
             questions=questions,
             answers=answers_dict,
-            st_questions=class_.cl_stat_questions
+            st_questions=class_.cl_stat_questions,
+            st_answers=st_answers_dict
         )
 
     if Class.usr_has_access_professor(class_.class_id, get_active_token()):

@@ -1,4 +1,4 @@
-from app.models import Class, db, Enrollment, Thread, Thread_Response, StatQuestion, StAnswer
+from app.models import Class, db, Enrollment, Thread, Thread_Response, StatQuestion, StAnswer, Lesson
 from flask import *
 from .index import get_active_token
 from datetime import datetime, timedelta, timezone
@@ -180,27 +180,38 @@ def class_post_create_st():
 
 @class_.post("/st/response")
 def class_post_response_st():
-    question_id = request.args.get('question_id')
     lesson_id = request.args.get('lesson_id')
+    lesson = Lesson.query.filter_by(lesson_id = lesson_id).first()
 
-    question = StatQuestion.query.filter_by(st_question_id=question_id).first()
-    class_id = question.class_id
+    class_id = lesson.class_id
 
     token = get_active_token()
+    uid = token.user_id
 
     if not Class.usr_has_access_student(class_id, token):
         return "no acc"
     
-    answer = request.form.get("rank")
 
-    answerObj = StAnswer(answer = answer,
-                        user_id=get_active_token().user_id,
-                        question_id=question_id,
-                        lesson_id=lesson_id )
-    db.session.add(answerObj)
+    resps = request.form.to_dict()
+
+    for answ in resps:
+        question_id = answ[3:]
+        print(question_id)
+
+        prevAns = StAnswer.query.filter_by(user_id=uid, question_id=question_id, lesson_id=lesson_id).first()
+
+        if prevAns:
+            prevAns.answer = resps[answ]
+        else:
+            answerObj = StAnswer(answer = resps[answ],
+                            user_id=uid,
+                            question_id=question_id,
+                            lesson_id=lesson_id )
+            db.session.add(answerObj)
+            
     db.session.commit()
-
-    return redirect('/')
+    
+    return redirect('/lesson?lesson_id=' + lesson_id)
     
 
 
