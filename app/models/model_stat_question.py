@@ -10,7 +10,10 @@ class StatQuestion(db.Model):
 
     st_ans = db.relationship('StAnswer', cascade="all, delete-orphan")
     st_class = db.relationship('Class', backref=db.backref('stat_questions', cascade="all, delete-orphan"), foreign_keys=[class_id])
-
+    
+    def get_avg(self):
+        return sum([ans.answer for ans in self.st_ans]) / len(self.st_ans)
+    
 class StAnswer(db.Model):
     __tablename__ = "stat_answer"
 
@@ -23,3 +26,5 @@ class StAnswer(db.Model):
 
     student = db.relationship("User", backref="st_answers")
     question = db.relationship("StatQuestion", backref=db.backref("st_answers", cascade="all, delete-orphan"), foreign_keys=[question_id])
+
+    
