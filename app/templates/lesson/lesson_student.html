@@ -52,8 +52,9 @@
             </nav>
 
             <p>{{ lesson.description }}</p>
+            <hr>
 
-            <h4 class="mb-3">Perguntas do Professor</h4>
+            <p class="h3 text-muted"><small>Perguntas do Professor</small></p>
             {% if questions %}
             <ul class="list-group">
                 <div class="accordion" id="accordion">
@@ -95,7 +96,8 @@
 
             <hr>
 
-            <h4 class="mb-3">Avaliação da Aula</h4>
+            <p class="h3 text-muted"><small>Avalie Aspectos da Aula</small></p>
+
             {% if st_questions %}
             <ul class="list-group">
                 <form method="post" action={{"/class/st/response?lesson_id=" ~ lesson.lesson_id}}>

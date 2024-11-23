@@ -17,8 +17,14 @@
             <div class="col-md-9">
                 <div class="container">
 
-                    <h2 class="mb-1">{{class_.class_name}} / Criar Thread</h2>
-                    <p class="lead">Faça uma pergunta no Fórum</p>
+                    <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb fs-3">
+                        <li class="breadcrumb-item">
+                            <a href={{ "/class?class_id=" ~ class_.class_id }}>{{class_.class_name}}</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Criar Thread</li>
+                    </ol>
+                </nav>
 
                     <form action={{"/class/thread/create?class_id=" ~ class_.class_id}} id="classCreateForm" method="post">
                         

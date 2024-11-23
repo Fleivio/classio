@@ -12,20 +12,14 @@
 
             <div class="col-md-9">
 
-                <h2 class="mb-5">Bem-vindo, {{user_data.username}}!</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb fs-3">
+                        <li class="breadcrumb-item active" aria-current="page">Bem-vindo, {{user_data.username}}!</li>
+                    </ol>
+                </nav>
 
-                <h3>Minhas Turmas</h3>
-                {% if user_data.classes_professor %}
-                <ul class="list-group mt-3">
-                    {%for class in user_data.classes_professor%}
-                        <a href={{"/class?class_id=" + class.class_id}} class="list-group-item list-group-item-action">{{class.class_name}}</a>
-                    {%endfor%}
-                </ul>
-                {% else %}
-                    <p>Você ainda não é professor de nenhuma turma.</p>
-                {% endif %}
+                <p class="h3 text-muted"><small>Matrículas</small></p>
 
-                <h3 class="mt-3">Minhas Disciplinas</h3>
                 {% if user_data.classes_student %}
                 <ul class="list-group mt-3">
                     {% for class in user_data.classes_student %}
@@ -35,6 +29,22 @@
                 {% else %}
                     <p>Você ainda não participa de nenhuma disciplina.</p> 
                 {% endif %}
+                <hr>
+
+                <p class="h3 text-muted"><small>Suas Turmas</small></p>
+
+                {% if user_data.classes_professor %}
+                <ul class="list-group mt-3">
+                    {%for class in user_data.classes_professor%}
+                        <a href={{"/class?class_id=" + class.class_id}} class="list-group-item list-group-item-action">{{class.class_name}}</a>
+                    {%endfor%}
+                </ul>
+                {% else %}
+                    <p>Você ainda não é professor de nenhuma turma.</p>
+                {% endif %}
+                <hr>
+
+                
             </div>
         </div>
     </div>

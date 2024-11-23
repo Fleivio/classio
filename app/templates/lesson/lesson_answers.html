@@ -22,10 +22,12 @@
                     </ol>
                 </nav>
 
-                <h4>{{ question.title }}</h4>
+                <p class="h3 text-muted"><small>{{ question.title }}</small></p>
+
                 <p>{{ question.description }}</p>
 
-                <h4 class="mt-4">Respostas</h4>
+                <p class="h3 text-muted"><small>Respostas</small></p>
+
                 {% if answers %}
 
                     <ul class="list-group list-group-flush">
