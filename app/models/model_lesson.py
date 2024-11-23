@@ -11,7 +11,6 @@ class Lesson(db.Model):
     class_ = db.relationship('Class', backref=db.backref('lessons', cascade="all, delete-orphan"), foreign_keys=[class_id])
     ls_questions = db.relationship('Question', cascade="all, delete-orphan")
 
-
     def to_dict(self):
         return {
             "lesson_id": str(self.lesson_id),

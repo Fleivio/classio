@@ -2,91 +2,216 @@
 
 {% block head %}
     {{ super() }}
+    <style>
+.star-average {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+}
+
+.stars {
+  position: relative;
+  display: inline-block;
+}
+
+.stars-bg {
+  color: #ddd; /* Cor das estrelas cinzas */
+}
+
+.stars-filled {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0; /* Ajustado dinamicamente */
+  color: #ffc107; /* Cor das estrelas amarelas */
+  overflow: hidden; /* Esconde estrelas amarelas excedentes */
+  white-space: nowrap;
+}
+
+.average-text {
+  margin-left: 10px;
+  font-size: 1rem;
+  color: #666;
+}
+
+    </style>
 {% endblock %}
 
 {% block content %}
     <div class="container mt-5">
         <div class="row gx-5 gy-3">
             {% include "sidebar.html" %}
-            <div class="col-md-9">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb fs-3">
-                        <li class="breadcrumb-item active" aria-current="page">{{ class_data.class_name }}</li>
-                    </ol>
-                </nav>
+    <div class="col-md-9">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb fs-3">
+                <li class="breadcrumb-item active" aria-current="page">{{ class_data.class_name }}</li>
+            </ol>
+        </nav>
 
-                <p>Código da Turma: {{ class_data.class_id }}</p>
+        <p>Código da Turma: {{ class_data.class_id }}</p>
 
-                <p>{{ class_data.class_description }}</p>
+        <p>{{ class_data.class_description }}</p>
 
-                <div class="container">
-                    <div class="row">
-                        <div class="col gx-0">
-                            <h3 class="mb-3">Aulas</h3>
-                        </div>
-                        <div class="col gx-0 text-end">
-                            <a href={{"/lesson/create?class_id=" + class_data.class_id}} class="btn btn-primary" role="button">Adicionar</a>
-                            <a href={{"/class/enrollments?class_id=" + class_data.class_id}} class="btn btn-primary" role="button">Inscrições</a>
-                        </div>
-                    </div>
+        <div class="container">
+            <div class="row">
+                <div class="col gx-0">
+                    <h3 class="mb-3">Aulas</h3>
                 </div>
-                <ul class="list-group">
-                    {% for lesson in class_data.lessons %}
-                        <a class="list-group-item list-group-item-active" 
-                           href={{ "/lesson?lesson_id=" + lesson.lesson_id }}
-                            >
-                           Aula - {{lesson.lesson_title}}
-                        </a>
-                    {% endfor %}
-                </ul>
-
-                <div class="mt-3 mb-2 container">
-                    <div class="row">
-                        <div class="col gx-0">
-                            <h3>Fórum</h3>
-                        </div>
-                        <div class="col gx-0 text-end">
-                            <a href={{"/class/thread/create?class_id=" ~ class_.class_id}} class="btn btn-primary" role="button">Nova Thread</a>
-                        </div>
-                    </div>
+                <div class="col gx-0 text-end">
+                    <a href={{"/lesson/create?class_id=" + class_data.class_id}} class="btn btn-primary" role="button">Adicionar</a>
+                    <a href={{"/class/enrollments?class_id=" + class_data.class_id}} class="btn btn-primary" role="button">Inscrições</a>
                 </div>
-                <ul class="list-group">
-                    {% for thread in class_.threads %}
-                        <a class="list-group-item list-group-item-active" 
-                           href={{ "/class/thread?thread_id=" ~ thread.thread_id }}
-                            >
-                           Thread - {{thread.title}}
-                        </a>
-                    {% endfor %}
-                </ul>
+            </div>
+        </div>
+        <ul class="list-group">
+            {% for lesson in class_data.lessons %}
+                <a class="list-group-item list-group-item-active" 
+                    href={{ "/lesson?lesson_id=" + lesson.lesson_id }}
+                    >
+                    Aula - {{lesson.lesson_title}}
+                </a>
+            {% endfor %}
+        </ul>
 
-
-                <div class="mt-3 mb-2 container">
-                    <div class="row">
-                        <div class="col gx-0">
-                            <h3>Estatísticas</h3>
-                        </div>
-                    </div>
-                    <div class="card mt-3">
-                        <div class="card-body">
-                            <form method="post" action={{"/class/st/create?class_id=" ~ class_.class_id}}>
-                                <label class="mb-2 form-label" for="st_title">Faça uma pesquisa</label>
-                                <textarea class="mb-3 form-control" required id="st_title" name="st_title"></textarea>
-                                <button class="btn btn-primary" type="submit">Pronto</button>
-                            </form>
-                        </div>
-                    </div>
+        <div class="mt-3 mb-2 container">
+            <div class="row">
+                <div class="col gx-0">
+                    <h3>Fórum</h3>
                 </div>
-                
+                <div class="col gx-0 text-end">
+                    <a href={{"/class/thread/create?class_id=" ~ class_.class_id}} class="btn btn-primary" role="button">Nova Thread</a>
+                </div>
+            </div>
+        </div>
+        <ul class="list-group">
+            {% for thread in class_.threads %}
+                <a class="list-group-item list-group-item-active" 
+                    href={{ "/class/thread?thread_id=" ~ thread.thread_id }}
+                    >
+                    Thread - {{thread.title}}
+                </a>
+            {% endfor %}
+        </ul>
+
+
+        <div class="mt-3 mb-2 container">
+            <div class="row">
+                <div class="col gx-0">
+                    <h3>Estatísticas</h3>
+                </div>
+            </div>
+        </div>
+        
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="by-question-tab" data-bs-toggle="tab" data-bs-target="#by-question" type="button" role="tab" aria-controls="by-question" aria-selected="true">Por Questão</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="by-class-tab" data-bs-toggle="tab" data-bs-target="#by-class" type="button" role="tab" aria-controls="by-class" aria-selected="false">Por Aula</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="by-question" role="tabpanel" aria-labelledby="by-question-tab">
                 <ul class="list-group">
-                    {% for st_quest in class_.stat_questions %}                        
-                        <h4>{{st_quest.title}} - {{st_quest.get_avg()}}</h4>
-                        {% for lesson in class_data.lessons%}
-                            <p>{{lesson.lesson_title}} - {{st_quest.get_avg_lesson(lesson.lesson_id)}}</p>
-                        {% endfor %}
+                    {% for st_quest in class_.stat_questions %}  
+                    <li class="list-group-item">
+                        <div class="container"> 
+                            <div class="row"> 
+                                <h5 class="col mb-0">{{st_quest.title}}</h5>
+                                <div class="col star-average">
+                                    <div class="stars">
+                                        <div class="stars-bg">★★★★★</div>
+                                        <div class="stars-filled" style="width: {{ st_quest.get_avg() * 20 }}%;">★★★★★</div> <!-- Estrelas preenchidas -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">Aula</th>
+                                <th scope="col">Resultado</th>
+                                <th scope="col">Votos</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for lesson in class_data.lessons%}
+                                    <tr>
+                                        <td>{{lesson.lesson_title}}</td>
+                                        <td>
+                                            <div class="star-average ">
+                                            <div class="stars">
+                                                <div class="stars-bg">★★★★★</div>
+                                                <div class="stars-filled" style="width: {{ st_quest.get_avg_lesson(lesson.lesson_id) * 20 }}%;">★★★★★</div> <!-- Estrelas preenchidas -->
+                                            </div>
+                                            </div>    
+                                        </td>
+                                        <td>{{st_quest.get_num_ans_lesson(lesson.lesson_id)}}</td>
+                                    </tr>                        
+                                {% endfor %}
+                            </tbody>    
+
+                        </table>
+                                    
+                    </li>
                     {% endfor %}
                 </ul>
             </div>
+            <div class="tab-pane fade" id="by-class" role="tabpanel" aria-labelledby="by-class-tab">
+                <ul class="list-group">
+                    {% for lesson in class_.lessons %}  
+                    <li class="list-group-item">
+                        <div class="container">
+                            <h5 class="col mb-0">{{lesson.title}}</h5>
+                        </div>       
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Questão</th>
+                            <th scope="col">Resultado</th>
+                            <th scope="col">Votos</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for st_quest in class_.cl_stat_questions%}
+                                <tr>
+                                    <td>{{st_quest.title}}</td>
+                                    <td>
+                                        <div class="star-average ">
+                                        <div class="stars">
+                                            <div class="stars-bg">★★★★★</div>
+                                            <div class="stars-filled" style="width: {{ st_quest.get_avg_lesson(lesson.lesson_id) * 20 }}%;">★★★★★</div> <!-- Estrelas preenchidas -->
+                                        </div>
+                                        </div>    
+                                    </td>
+                                    <td>{{st_quest.get_num_ans_lesson(lesson.lesson_id)}}</td>
+                                </tr>                        
+                            {% endfor %}
+                        </tbody>    
+
+                    </table>
+                </li>
+
+                    {% endfor %}
+
+                </ul>
+                            
+            </div>
+        </div>
+        
+
+        <div class="card mt-3">
+            <div class="card-body">
+                <form method="post" action={{"/class/st/create?class_id=" ~ class_.class_id}}>
+                    <label class="mb-2 form-label" for="st_title">Faça uma pesquisa</label>
+                    <input type="text" class="mb-3 form-control" required id="st_title" name="st_title">
+                    <button class="btn btn-primary" type="submit">Pronto</button>
+                </form>
+            </div>
+        </div>
+    </div>
+            
+            
         </div>
     </div>
 {% endblock %}

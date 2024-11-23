@@ -19,6 +19,9 @@ class StatQuestion(db.Model):
         answers = [ans.answer for ans in self.st_ans if ans.lesson_id == int(lesson_id)]
         return sum(answers) / len(answers) if answers else 0
     
+    def get_num_ans_lesson(self, lesson_id):
+        return len([ans.answer for ans in self.st_ans if ans.lesson_id == int(lesson_id)])
+    
 class StAnswer(db.Model):
     __tablename__ = "stat_answer"
 

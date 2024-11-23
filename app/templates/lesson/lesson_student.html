@@ -2,6 +2,35 @@
 
 {% block head %}
     {{ super() }}
+
+    <style>
+
+  .star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+  }
+
+  .star-rating input[type="radio"] {
+    display: none;
+  }
+
+  .star-rating label {
+    font-size: 1.5rem;
+    color: #ddd;
+    cursor: pointer;
+  }
+
+  .star-rating input[type="radio"]:checked ~ label {
+    color: #ffc107;
+  }
+
+  .star-rating label:hover,
+  .star-rating label:hover ~ label {
+    color: #ffdd99;
+  }
+    </style>
+
 {% endblock %}
 
 {% block content %}
@@ -73,16 +102,21 @@
 
                 {% for st_question in st_questions %}
                   <div class="row mb-3">
-                  <label for={{"st_" ~ st_question.st_question_id}} class="col-sm-2 col-form-label col-form-label-sm">{{st_question.title}}</label>
-                  <div class="col-sm-10">
-                    <input  type="range" 
-                            min="1"
-                            max="5"
-                            value={{st_answers[st_question.st_question_id]}}
-                            class="form-control form-control-sm" 
-                            id={{"st_" ~ st_question.st_question_id}}
-                            name={{"st_" ~ st_question.st_question_id}}
-                            placeholder="col-form-label-sm">
+                  <label for={{"st_" ~ st_question.st_question_id}} class="col-sm-2 col-form-label col-form-label-sm">
+                    {{st_question.title}}
+                  </label>
+
+                  <div class="col-sm-10 d-flex align-items-center">
+                    <div class="star-rating" data-question-id="{{ st_question.st_question_id }}">
+                      {% for i in range(1, 6)[::-1] %}
+                        <input type="radio" 
+                               id="{{ "st_" ~ st_question.st_question_id ~ "_" ~ i }}" 
+                               name="{{ "st_" ~ st_question.st_question_id }}" 
+                               value="{{ i }}" 
+                               {% if st_answers[st_question.st_question_id] == i %}checked{% endif %}>
+                        <label for="{{ "st_" ~ st_question.st_question_id ~ "_" ~ i }}" class="star">&#9733;</label>
+                      {% endfor %}
+                    </div>
                   </div>
                   </div>
                 {%endfor%}
