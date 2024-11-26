@@ -8,19 +8,18 @@ class StatQuestion(db.Model):
     title = db.Column(db.String(128), nullable=False)
     class_id = db.Column(db.Integer, db.ForeignKey("class.class_id"), nullable=False)
 
-    st_ans = db.relationship('StAnswer', cascade="all, delete-orphan")
-    st_class = db.relationship('Class', backref=db.backref('stat_questions', cascade="all, delete-orphan"), foreign_keys=[class_id])
-    
+    st_class = db.relationship("Class", backref=db.backref("st_questions", cascade="all, delete-orphan"), foreign_keys=[class_id])
+
     def get_avg(self):
-        answers = [ans.answer for ans in self.st_ans]
+        answers = [ans.answer for ans in self.st_answers]
         return sum(answers) / len(answers) if answers else 0
     
     def get_avg_lesson(self, lesson_id):
-        answers = [ans.answer for ans in self.st_ans if ans.lesson_id == int(lesson_id)]
+        answers = [ans.answer for ans in self.st_answers if ans.lesson_id == int(lesson_id)]
         return sum(answers) / len(answers) if answers else 0
     
     def get_num_ans_lesson(self, lesson_id):
-        return len([ans.answer for ans in self.st_ans if ans.lesson_id == int(lesson_id)])
+        return len([ans.answer for ans in self.st_answers if ans.lesson_id == int(lesson_id)])
     
 class StAnswer(db.Model):
     __tablename__ = "stat_answer"

@@ -58,7 +58,7 @@
                 <div class="col gx-0">
                     <p class="h3 text-muted"><small>Aulas</small></p>
                 </div>
-                <div class="col gx-0 text-end">
+                <div class="col-sm text-end">
                     <a href={{"/lesson/create?class_id=" + class_data.class_id}} class="btn btn-primary" role="button">Adicionar</a>
                     <a href={{"/class/enrollments?class_id=" + class_data.class_id}} class="btn btn-primary" role="button">Inscrições</a>
                 </div>
@@ -104,7 +104,6 @@
         {%endif%}
         <hr>
 
-
         <div class="mt-3 mb-2 container">
             <div class="row">
                 <div class="col gx-0">
@@ -127,14 +126,12 @@
                 <ul class="list-group">
                     {% for st_quest in class_.stat_questions %}  
                     <li class="list-group-item">
-                        <div class="container"> 
-                            <div class="row"> 
-                                <h5 class="col mb-0">{{st_quest.title}}</h5>
-                                <div class="col star-average">
-                                    <div class="stars">
-                                        <div class="stars-bg">★★★★★</div>
-                                        <div class="stars-filled" style="width: {{ st_quest.get_avg() * 20 }}%;">★★★★★</div> <!-- Estrelas preenchidas -->
-                                    </div>
+                        <div class="container d-flex">  
+                            <h5 class="mt-2" style="margin-right:10px">{{st_quest.title}}</h5>
+                            <div class="star-average">
+                                <div class="stars">
+                                    <div class="stars-bg">★★★★★</div>
+                                    <div class="stars-filled" style="width: {{ st_quest.get_avg() * 20 }}%;">★★★★★</div> <!-- Estrelas preenchidas -->
                                 </div>
                             </div>
                         </div>
@@ -185,7 +182,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                            {% for st_quest in class_.cl_stat_questions%}
+                            {% for st_quest in class_.st_questions%}
                                 <tr>
                                     <td>{{st_quest.title}}</td>
                                     <td>
@@ -218,9 +215,10 @@
             <div class="card-body">
                 <form method="post" action={{"/class/st/create?class_id=" ~ class_.class_id}}>
                     <label class="mb-2 form-label" for="st_title">Adicione um item para que os alunos o avaliem</label>
-                    <br>
-                    <span>Ex: Metodologia, Material, Didática</span>
-                    <input type="text" class="mb-3 form-control" required id="st_title" name="st_title">
+                    <div class="form-floating">
+                        <input type="text" class="mb-3 form-control" required id="st_title" name="st_title" placeholder="">
+                        <label for="st_title">Ex: Metodologia, Material, Didática</label>
+                    </div>
                     <button class="btn btn-primary" type="submit">Adicionar</button>
                 </form>
             </div>

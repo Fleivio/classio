@@ -13,8 +13,6 @@ class Thread(db.Model):
     user = db.relationship("User", backref="threads")
     class_ = db.relationship('Class', backref=db.backref('threads', cascade="all, delete-orphan"), foreign_keys=[class_id])
 
-    th_responses = db.relationship('Thread_Response', cascade="all, delete-orphan")
-
 class Thread_Response(db.Model):
     __tablename__ = "thread_response"
 

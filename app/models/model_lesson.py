@@ -9,7 +9,6 @@ class Lesson(db.Model):
     class_id = db.Column(db.Integer, db.ForeignKey('class.class_id'), nullable=False) 
 
     class_ = db.relationship('Class', backref=db.backref('lessons', cascade="all, delete-orphan"), foreign_keys=[class_id])
-    ls_questions = db.relationship('Question', cascade="all, delete-orphan")
 
     def to_dict(self):
         return {

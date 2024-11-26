@@ -15,9 +15,6 @@ class Question(db.Model):
 
     lesson = db.relationship("Lesson", backref=db.backref('questions', cascade="all, delete-orphan"), foreign_keys=[lesson_id])
 
-    qs_answers = db.relationship("Answer", cascade="all, delete-orphan")
-
-
 class Answer(db.Model):
     __tablename__ = "answer"
 

@@ -30,7 +30,7 @@ def lesson_get():
         for answer in answers:
             answers_dict[answer.question_id] = answer.answer
 
-        st_questions = class_.cl_stat_questions
+        st_questions = class_.st_questions
 
         st_answers_dict = {}
         for st_question in st_questions:
@@ -48,7 +48,7 @@ def lesson_get():
             lesson=lesson,
             questions=questions,
             answers=answers_dict,
-            st_questions=class_.cl_stat_questions,
+            st_questions=class_.st_questions,
             st_answers=st_answers_dict
         )
 
