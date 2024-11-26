@@ -1,5 +1,6 @@
 {% block sidebar %}
-    <div class="col-md-3">
+
+    <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse" id="sidebarMenu">
         <ul class="list-group">
             <a href="/home" class="list-group-item list-group-item-action">Início</a>
             <a href="/class/create" class="list-group-item list-group-item-action">Criar Turma</a>
@@ -12,5 +13,11 @@
             </form></li>
             {# <a href="/user/logout" class="list-group-item list-group-item-action">Sair</a> #}
         </ul>
-    </div>
+    </nav>
+
+    <button class="btn btn-secondary d-md-none mb-3" style="max-width: 10%;" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-expanded="false" aria-controls="sidebarMenu">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+      
+      
 {% endblock %}
